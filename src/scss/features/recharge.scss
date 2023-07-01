@@ -1,0 +1,30 @@
+.recharge {
+  width: 100%;
+
+  .recharge__header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 4%;
+    text-align: center;
+  }
+  .recharge__content,
+  .recharge__form {
+    width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 6px;
+  }
+
+  .recharge__content {
+    text-align: center;
+    p {
+      font-size: 16px;
+      font-weight: 600;
+      span {
+        font-size: 16px;
+        margin-right: 10px;
+      }
+    }
+  }
+}

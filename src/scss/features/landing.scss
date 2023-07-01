@@ -1,0 +1,135 @@
+.ant-popover-inner{
+  width: 225px;
+  border-radius: 8px;
+
+  .ant-popover-title{
+    padding: 10px 15px;
+  }
+}
+
+.auth-option {
+  padding: 10px 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #fafafa;
+  }
+}
+
+.landing {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .landing-header {
+    background-color: #fe6232;
+    padding: 10px;
+    height: $headerHeight;
+
+    .landing-header__left-side {
+      display: flex;
+      align-items: center;
+      max-width: 60%;
+      justify-content: space-between;
+      gap: 30px;
+      flex: 1;
+
+      .landing-header__nav-links {
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        justify-content: space-around;
+        font-size: 16px;
+      }
+    }
+
+    .landing-header__right-side {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 16px;
+
+      button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+        color: white;
+      }
+
+      span {
+        font-size: 25px;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .landing-footer {
+    background-color: #f5f5f5;
+    padding: 42px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    .container {
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      .landing__nav-container {
+        display: flex;
+        font-size: 12px;
+        .landing__nav-item {
+          color: rgba(0, 0, 0, 0.54);
+          padding: 0 25px;
+          cursor: pointer;
+          + .landing__nav-item {
+            border-left: 1px solid rgba(0, 0, 0, 0.09);
+          }
+        }
+      }
+      .landing__logo-register--confirmed {
+        display: flex;
+        gap: 13px;
+        img {
+          width: 120px;
+        }
+      }
+    }
+  }
+
+  .landing-body {
+    flex: 1;
+    background-color: #f5f5f5;
+    position: relative;
+
+    .landing-content {
+      flex: 1;
+      .landing-content__header {
+        color: rgb(238, 77, 45);
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.9375rem 2.875rem;
+        text-align: center;
+        height: 3.75rem;
+        background-color: white;
+        border-bottom: solid 4px red;
+        margin-bottom: 10px;
+      }
+      .landing__list-items {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto;
+        gap: 10px;
+      }
+
+      .landing__button-container {
+        padding: 10px 0 20px;
+        text-align: center;
+
+        .landing__button {
+        }
+      }
+    }
+  }
+}

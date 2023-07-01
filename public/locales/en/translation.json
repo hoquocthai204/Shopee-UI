@@ -1,0 +1,84 @@
+{
+  "welcome": "Welcome",
+  "header": {
+    "market": "Market",
+    "trade": "Buy/Sell",
+    "wallet": "Wallet",
+    "news": "News",
+    "blog": "Blog",
+    "about": "About Us",
+    "help": "Help",
+    "login": "Log in",
+    "signup": "Sign up"
+  },
+  "about": {
+    "about": "About",
+    "terms_conditions": "Terms  & Conditions",
+    "coin&list": "Coin Infos & Listing Rules",
+    "buy&sell": "Buy & Sell Rules",
+    "privacy": "Privacy Policy",
+    "AML/CTPF": "AML/CTPF Policy"
+  },
+  "signup": {
+    "email": "Sign up with Email",
+    "maxCard": "Sign up with Max Card"
+  },
+  "banner": {
+    "title_1": "Modern investment",
+    "title_2": "For all Thai people",
+    "subtitle": "Fast digital asset trading, Simple, Secure",
+    "button": "Apply now",
+    "introduce": "XLM and SIX Withdrawal are Back in Service from 14/12/2021 at 05:10 AM (GMT+7) onwards"
+  },
+  "footer": {
+    "careers": "Careers",
+    "terms": "Terms of Service",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "markets": {},
+  "trade": {},
+  "wallet": {
+    "sidebar": {
+      "overview": "Overview",
+      "fiatsport": "Fiat and Spot",
+      "transhistory": "Transaction History"
+    }
+  },
+  "orders": {
+    "sidebar": {
+      "openorder": "Open Orders",
+      "tradeorder": "Order History",
+      "usertrade": "Trade History"
+    }
+  },
+  "account": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "security": "Security",
+      "identification": "Identification",
+      "payment": "Payment",
+      "referral": "Referral",
+      "reward": "Reward Center",
+      "settings": "Settings"
+    },
+    "usermenu": {
+      "setting": "Setting",
+      "help": "Help",
+      "signout": "Sign out"
+    }
+  },
+
+  "inmail": {},
+  "login": {
+    "form": {
+      "username": "Username",
+      "password": "Password",
+      "2facode": "2FA Code",
+      "loginbtn": "Login"
+    }
+  },
+  "register": {},
+  "download": {},
+  "language": {}
+}

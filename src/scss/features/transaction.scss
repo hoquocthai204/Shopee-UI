@@ -1,0 +1,40 @@
+.transaction{
+  width: 100%;
+
+  .transaction__header{
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 4%;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .transaction__img-container{
+    width: 100px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    img{
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+  }
+
+  .transaction__content{
+    display: flex;
+    flex-direction: column;
+    span:nth-child(1){
+      font-size: 20px;
+      font-weight: 600;
+    }
+    span:nth-child(2){
+      font-size: 16px;
+      font-weight: 500;
+      opacity: .6;
+    }
+  }
+
+}

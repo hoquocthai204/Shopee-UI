@@ -1,0 +1,24 @@
+//variable
+@import './variable.scss';
+
+// base...
+@import './generic/normalize.scss';
+@import './generic/box-sizing.scss';
+@import './base/base.scss';
+
+// components...
+@import './components/form.scss';
+
+// features...
+@import './features/landing.scss';
+// @import './features/home.scss';
+// @import './features/setting.scss';
+// @import './features/static.scss';
+@import './features/auth.scss';
+@import './features/recharge.scss';
+@import './features/merchant.scss';
+@import './features/product.scss';
+@import './features/transaction.scss';
+
+// objects...
+// @import './objects/layout.scss';

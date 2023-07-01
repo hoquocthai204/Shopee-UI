@@ -1,0 +1,16 @@
+.merchant {
+  width: 100%;
+  .merchant__header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 4%;
+    text-align: center;
+  }
+  .merchant__form {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 6px;
+  }
+}
