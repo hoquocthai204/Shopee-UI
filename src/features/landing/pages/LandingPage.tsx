@@ -37,7 +37,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
               <Card
                 hoverable
                 style={{ width: 190 }}
-                cover={<img alt="example" src={e.images[0]} />}
+                cover={<img alt="example" src={e.images[0].toString()} />}
                 onClick={() => handleSelect(e.id || i)}
               >
                 <Meta title={e.name} description={e.price} />

@@ -10,11 +10,11 @@ import ProductForm from '../components/ProductForm';
 interface ProductPageProps {}
 
 export const productFormField = {
-  name: 'name',
-  description: 'description',
-  images: 'images',
-  price: 'price',
-  category: 'category',
+  name: 'Name',
+  description: 'Description',
+  // images: 'images',
+  price: 'Price',
+  category: 'Category',
 };
 
 const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
@@ -91,7 +91,7 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
                   <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
                   <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
                 ]}
-                cover={<img alt="example" src={e.images[0]} />}
+                cover={<img alt="example" src={e.images.toString()} />}
               >
                 <Meta title={e.name} description={e.price} />
               </Card>

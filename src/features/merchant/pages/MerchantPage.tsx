@@ -62,13 +62,21 @@ const MerchantPage: React.FunctionComponent<MerchantPageProps> = (props) => {
               label={e}
               name={Object.keys(formData)[i]}
               rules={[{ required: true, message: `${e} is required` }]}
+              className="merchant__input-container"
             >
               <Input />
             </Form.Item>
           ))}
 
           <Form.Item>
-            <Button type="primary" size={'large'} block danger htmlType="submit">
+            <Button
+              className="merchant__submit-btn"
+              type="primary"
+              size={'large'}
+              block
+              danger
+              htmlType="submit"
+            >
               Register
             </Button>
           </Form.Item>

@@ -60,11 +60,11 @@ const RechargePage: React.FunctionComponent<RechargePageProps> = (props) => {
             name="amount"
             rules={[{ required: true, message: 'Please input amount!' }]}
           >
-            <Input />
+            <Input type="number" />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" block danger htmlType="submit">
+            <Button className="recharge__submit-btn" type="primary" block danger htmlType="submit">
               Continue
             </Button>
           </Form.Item>

@@ -93,7 +93,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
           <div className="product-detail__container">
             <div className="product-detail__left-side">
               <div className="product-detail__img-container">
-                <img src={productDetail.images[0]} alt="product" />
+                <img src={productDetail.images.toString()} alt="product" />
               </div>
             </div>
 

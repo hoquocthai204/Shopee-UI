@@ -13,7 +13,25 @@
     margin: 30px auto;
     padding: 20px;
     background-color: white;
-    border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #ccc;
+
+    label {
+      font-weight: 600;
+    }
+    input {
+      height: 50px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .recharge__submit-btn {
+      margin-top: 5px;
+      border-radius: 8px;
+      height: 50px;
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
 
   .recharge__content {

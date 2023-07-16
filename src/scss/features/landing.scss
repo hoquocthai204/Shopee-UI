@@ -1,20 +1,29 @@
-.ant-popover-inner{
-  width: 225px;
+.ant-popover-inner {
+  width: 250px;
   border-radius: 8px;
 
-  .ant-popover-title{
+  .ant-popover-title {
     padding: 10px 15px;
+    user-select: none;
   }
 }
+.landing-header__option-container {
+  margin: -12px -16px;
 
-.auth-option {
-  padding: 10px 5px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
+  .auth-option {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    transition: all 0.3s ease;
 
-  &:hover {
-    background-color: #fafafa;
+    &:hover {
+      background-color: #fafafa;
+
+      &:last-child:hover {
+        border-radius: 0 0 8px 8px;
+      }
+    }
   }
 }
 
@@ -27,6 +36,7 @@
     background-color: #fe6232;
     padding: 10px;
     height: $headerHeight;
+    user-select: none;
 
     .landing-header__left-side {
       display: flex;
@@ -44,6 +54,7 @@
         flex: 1;
         justify-content: space-around;
         font-size: 16px;
+        font-weight: 600;
       }
     }
 

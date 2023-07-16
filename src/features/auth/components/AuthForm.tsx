@@ -23,6 +23,7 @@ export const AuthForm = ({ initialValue, onSubmit, onFail, submitType }: AuthFor
         label="Email"
         name="email"
         rules={[{ required: true, message: 'Please input your email!' }]}
+        className="auth__input-container"
       >
         <Input className="auth__input" />
       </Form.Item>
@@ -31,12 +32,13 @@ export const AuthForm = ({ initialValue, onSubmit, onFail, submitType }: AuthFor
         label="Password"
         name="password"
         rules={[{ required: true, message: 'Please input your password!' }]}
+        className="auth__input-container"
       >
         <Input.Password className="auth__input" />
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" block danger htmlType="submit">
+        <Button className="auth__submit" type="primary" block danger htmlType="submit">
           {submitType || 'Submit'}
         </Button>
       </Form.Item>

@@ -7,10 +7,34 @@
     text-align: center;
   }
   .merchant__form {
-    max-width: 400px;
     margin: 30px auto;
     padding: 20px;
     background-color: white;
     border-radius: 6px;
+    box-shadow: 0 0 5px #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 900px;
+    justify-content: space-between;
+
+    .merchant__input-container {
+      label {
+        font-weight: 600;
+      }
+
+      input {
+        width: 400px;
+        height: 45px;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+    }
+    .merchant__submit-btn {
+      height: 45px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      margin-top: 5px;
+    }
   }
 }

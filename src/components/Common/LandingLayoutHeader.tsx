@@ -25,9 +25,14 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
   const isMerchantState = useAppSelector(selectIsMerchant);
 
   const getUserDetail = useCallback(async () => {
-    const res = await userApi.getUserDetail(localStorage.getItem('token') || '');
+    const res = await userApi.getUserDetail(localStorage.getItem('token') || '').catch(() => {
+      dispatch(authActions.setIsLoggedIn(false));
+      localStorage.removeItem('token');
+    });
+
     if (res) {
       setUserDetail(res);
+      dispatch(authActions.setIsLoggedIn(true));
     }
   }, []);
 
@@ -71,6 +76,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
       localStorage.removeItem('token');
       navigate('/');
     });
+
     if (res === 'success') {
       dispatch(authActions.setIsLoggedIn(false));
       localStorage.removeItem('token');
@@ -86,21 +92,25 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
   };
 
   const content = (
-    <>
+    <div className="landing-header__option-container">
       <div className="auth-option">
         Balance:{' '}
         <span>
           <CoinIcon /> {balance}
         </span>
       </div>
-      <div className="auth-option" onClick={() => navigate('merchant')}>
-        <span>Merchant: </span>
-        {isMerchant ? (
+      {isMerchant ? (
+        <div className="auth-option">
+          <span>Merchant: </span>
           <span style={{ color: '#00F295' }}>Registered</span>
-        ) : (
+        </div>
+      ) : (
+        <div className="auth-option" onClick={() => navigate('merchant')}>
+          <span>Merchant: </span>
           <span style={{ color: '#ccc' }}>Unregistered</span>
-        )}
-      </div>
+        </div>
+      )}
+
       <div className="auth-option" onClick={() => navigate('recharge')}>
         Recharge
       </div>
@@ -113,7 +123,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
       <div className="auth-option" onClick={logout}>
         Log Out
       </div>
-    </>
+    </div>
   );
 
   return (
