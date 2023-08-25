@@ -5,12 +5,21 @@ import merchantApi from 'api/merchantApi';
 import userApi from 'api/userApi';
 import walletApi from 'api/walletApi';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import appQrcode from 'assets/images/shopee_qrcode.png';
+import {
+  DownIcon,
+  HelpIcon,
+  NotificationIcon,
+  SearchIcon,
+  ShopLogo,
+  TranslateIcon,
+} from 'components/Icons';
 import { CoinIcon } from 'components/Icons/CoinIcon';
-import { MainLogo } from 'components/Icons/MainLogo';
+import { recommentProductTagInfo } from 'constants/landing/recommentProductTagInfo';
 import { authActions, selectIsLoggedIn, selectIsMerchant } from 'features/auth/authSlice';
 import { UserInformation } from 'models/user/userInformation';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export interface LandingLayoutHeaderProps {}
 
@@ -126,13 +135,80 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
     </div>
   );
 
+  const downloadContent = (
+    <div className="shopee-qrcode">
+      <img src={appQrcode} alt="app-qrcode" />
+    </div>
+  );
+
   return (
     <>
+      <div className="landing-top__navbar">
+        <div className="container">
+          <div className="landing-top__group">
+            <span className="landing-top__nav">Kênh Người Bán</span>
+            <div className="landing-top__divider" />
+            {!isLoggedIn && (
+              <>
+                <span className="landing-top__nav">Trở thành Người bán Shopee</span>
+                <div className="landing-top__divider" />
+              </>
+            )}
+            <Popover content={downloadContent} placement="bottomLeft">
+              <span className="landing-top__nav">Tải ứng dụng</span>
+            </Popover>
+            <div className="landing-top__divider" />
+            <span className="landing-top__nav">Kết nối</span>
+          </div>
+
+          <div className="landing-top__group">
+            <span className="landing-top__nav">
+              <NotificationIcon style={{ width: '14px', height: '18px' }} /> Thông Báo
+            </span>
+            <span className="landing-top__nav">
+              <HelpIcon style={{ width: '18px', height: '18px' }} />
+              Hỗ Trợ
+            </span>
+            <span className="landing-top__nav">
+              <TranslateIcon style={{ width: '16px', height: '16px' }} />
+              Tiếng Việt
+              <DownIcon />
+            </span>
+            {!isLoggedIn ? (
+              <>
+                <span className="landing-top__nav" onClick={() => navigate('register')}>
+                  Đăng Ký
+                </span>
+                <div className="landing-top__divider" />
+                <span className="landing-top__nav" onClick={() => navigate('login')}>
+                  Đăng Nhập
+                </span>
+              </>
+            ) : (
+              <Popover
+                style={{ width: '600px' }}
+                onVisibleChange={handlePopover}
+                placement="bottomRight"
+                title={<span>{userDetail?.email}</span>}
+                content={content}
+                trigger="click"
+                className="landing-avatar__container"
+              >
+                <div className="landing-avatar__logo">
+                  <UserOutlined />
+                </div>
+                <span className="landing-avatar__name">{userDetail?.email.split('@')[0]}</span>
+                {/* <span className="landing-avatar__name">thaivu204</span> */}
+              </Popover>
+            )}
+          </div>
+        </div>
+      </div>
       <div className="landing-header">
         <div className="container">
           <div className="landing-header__left-side">
-            <MainLogo />
-            <ul className="landing-header__nav-links">
+            <ShopLogo onClick={() => navigate('')} />
+            {/* <ul className="landing-header__nav-links">
               <li>
                 <Link style={{ color: 'white' }} to={'wallet'}>
                   Wallet
@@ -155,19 +231,31 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
                   Pricing
                 </Link>
               </li>
+            </ul> */}
+          </div>
+          <div className="landing-header__middle">
+            <div className="landing-header__searchbar">
+              <input
+                type="text"
+                className="landing-header__input"
+                placeholder="TẶNG MÁY TĂM NƯỚC 2.490.000Đ"
+              />
+              <button className="landing-header__search-btn">
+                <SearchIcon />
+              </button>
+            </div>
+            <ul className="landing-header__tag-list">
+              {recommentProductTagInfo.map((val, index) => (
+                <li key={index} className="landing-header__tag">
+                  {val.name}
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="landing-header__right-side">
-            {!token ? (
-              <>
-                <button onClick={() => navigate('login')}>Log In</button>
-                <button onClick={() => navigate('register')}>Register</button>
-              </>
-            ) : (
-              <>
-                <ShoppingCartOutlined onClick={handleOpenCart} />
 
-                <Popover
+          <div className="landing-header__right-side">
+            <ShoppingCartOutlined onClick={handleOpenCart} />
+            {/* <Popover
                   style={{ width: '600px' }}
                   onVisibleChange={handlePopover}
                   placement="bottomRight"
@@ -176,9 +264,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
                   trigger="click"
                 >
                   <UserOutlined />
-                </Popover>
-              </>
-            )}
+                </Popover> */}
           </div>
         </div>
       </div>

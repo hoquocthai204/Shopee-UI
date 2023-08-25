@@ -27,25 +27,34 @@ const ProductForm: React.FunctionComponent<ProductFormProps> = ({
 }) => {
   const token = useRef(localStorage.getItem('token')).current || '';
   const [imageUrl, setImageUrl] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [form] = useForm();
 
   const handleCreate = (data: ProductInfo) => {
-    createProduct(data);
+    const dataSend = {
+      ...data,
+      images: [imageUrl],
+    };
+    createProduct(dataSend);
   };
 
   const handleUpdate = (data: ProductInfo) => {
-    updateProduct(productUpdateField?.id, data);
+    // updateProduct(productUpdateField?.id, data);
   };
 
   const createProduct = useCallback(async (data: ProductInfo) => {
-    console.log(data);
     const merchant = await merchantApi.getMerchant(token);
-    const res = await productApi.createProduct(token, {
+    console.log({
       ...data,
-      images: [imageUrl],
+      // images: imageUrl,
       merchantId: Number(merchant.id),
     });
+    const res = await productApi.createProduct(token, {
+      ...data,
+      // images: imageUrl,
+      merchantId: Number(merchant.id),
+    });
+
     if (res) {
       setOpenModal(false);
       getProduct();
@@ -72,29 +81,12 @@ const ProductForm: React.FunctionComponent<ProductFormProps> = ({
     return newData;
   };
 
-  const handleImageChange = (e: any) => {
-    setImageUrl(URL.createObjectURL(e.target.files[0]));
+  const handleFileChange = (info: any) => {
+    setImageUrl(URL.createObjectURL(info.file));
   };
 
-  const handleImageUpload = (info: any) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      setLoading(false);
-      getBase64(info.file.originFileObj, (imageUrl: string) => setImageUrl(imageUrl));
-    }
-    if (info.file.status === 'error') {
-      setLoading(false);
-      message.error('Upload failed');
-    }
-  };
-
-  const getBase64 = (img: any, callback: any) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
+  const handleRemove = () => {
+    setImageUrl('');
   };
 
   return (
@@ -156,24 +148,17 @@ const ProductForm: React.FunctionComponent<ProductFormProps> = ({
               </Form.Item>
             ))}
 
-            <Form.Item
-              label={'Image'}
-              name={'images'}
-              rules={[{ required: true, message: `${'Image'} is required` }]}
-            >
-              <Upload listType="picture-card" showUploadList={false} onChange={handleImageUpload}>
-                {imageUrl ? (
-                  <img src={imageUrl} alt="Uploaded" style={{ width: '100%' }} />
-                ) : (
-                  <div>
-                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
-                )}
+            <Form.Item label={'Image'}>
+              <Upload
+                onRemove={handleRemove}
+                onChange={handleFileChange}
+                beforeUpload={() => false}
+              >
+                <Button icon={<UploadOutlined />} style={{ padding: '8px' }}>
+                  Upload
+                </Button>
               </Upload>
-
-              {/* <input type="file" style={{ padding: '8px' }} onChange={handleImageChange} />
-              {imageUrl && <img style={{ width: '100%' }} src={imageUrl} alt="product-img" />} */}
+              {imageUrl && <img style={{ width: '100%' }} src={imageUrl} alt="Uploaded" />}
             </Form.Item>
 
             <Form.Item>

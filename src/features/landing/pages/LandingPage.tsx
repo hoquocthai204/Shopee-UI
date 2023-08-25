@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import productApi from 'api/productApi';
 import { ProductInfo } from 'models/product/productInfo';
@@ -37,7 +37,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
               <Card
                 hoverable
                 style={{ width: 190 }}
-                cover={<img alt="example" src={e.images[0].toString()} />}
+                cover={<img alt="example" src={''.toString()} />}
                 onClick={() => handleSelect(e.id || i)}
               >
                 <Meta title={e.name} description={e.price} />

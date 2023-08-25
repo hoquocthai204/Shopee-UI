@@ -91,7 +91,7 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
                   <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
                   <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
                 ]}
-                cover={<img alt="example" src={e.images.toString()} />}
+                cover={<img alt="example" src={''.toString()} />}
               >
                 <Meta title={e.name} description={e.price} />
               </Card>
