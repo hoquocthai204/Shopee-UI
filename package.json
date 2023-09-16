@@ -38,6 +38,7 @@
     "react-slick": "^0.28.1",
     "react-toastify": "^8.1.0",
     "react-use-websocket": "^2.9.1",
+    "slick-carousel": "^1.8.1",
     "typescript": "^4.1.6",
     "yup": "^0.32.11"
   },

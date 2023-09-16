@@ -6,6 +6,7 @@ import { ModalComponent } from 'components/Common/ModalComponent';
 import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ProductForm from '../components/ProductForm';
+import { ProductCard } from 'components/Common/ProductCard';
 
 interface ProductPageProps {}
 
@@ -39,12 +40,20 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
     setOpenCreateModal(true);
   };
 
-  const handleEdit = (id: number | undefined) => {
+  const handleEdit = (
+    id: number | undefined,
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
     getProductDetail(id);
     setOpenEditModal(true);
   };
 
-  const handleDelete = (id: number | undefined) => {
+  const handleDelete = (
+    id: number | undefined,
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
     setProductDeleteSelected(id);
     setOpenDeleteModal(true);
   };
@@ -83,18 +92,25 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
         <div className="product__list-items">
           {productInfo &&
             productInfo.map((e, i) => (
-              <Card
-                key={e.id}
-                style={{ width: 190 }}
-                hoverable
+              // <Card
+              //   key={e.id}
+              //   style={{ width: 190 }}
+              //   hoverable
+              // actions={[
+              //   <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
+              //   <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
+              // ]}
+              //   cover={<img alt="example" src={''.toString()} />}
+              // >
+              //   <Meta title={e.name} description={e.price} />
+              // </Card>
+              <ProductCard
                 actions={[
-                  <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
-                  <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
+                  <EditOutlined onClick={(event) => handleEdit(e.id, event)} key="edit" />,
+                  <DeleteOutlined onClick={(event) => handleDelete(e.id, event)} key="delete" />,
                 ]}
-                cover={<img alt="example" src={''.toString()} />}
-              >
-                <Meta title={e.name} description={e.price} />
-              </Card>
+                info={e}
+              />
             ))}
         </div>
 

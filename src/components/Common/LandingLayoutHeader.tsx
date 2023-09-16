@@ -25,7 +25,6 @@ export interface LandingLayoutHeaderProps {}
 
 export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderProps> = (props) => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
   const dispatch = useAppDispatch();
   const [balance, setBalance] = useState(0);
   const [userDetail, setUserDetail] = useState<UserInformation>();
@@ -114,21 +113,30 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
           <span style={{ color: '#00F295' }}>Registered</span>
         </div>
       ) : (
-        <div className="auth-option" onClick={() => navigate('merchant')}>
+        <div className="auth-option" onClick={() => handleNav('merchant')}>
           <span>Merchant: </span>
           <span style={{ color: '#ccc' }}>Unregistered</span>
         </div>
       )}
 
-      <div className="auth-option" onClick={() => navigate('recharge')}>
+      <div className="auth-option" onClick={() => handleNav('recharge')}>
         Recharge
       </div>
-      <div className="auth-option" onClick={() => navigate('transaction-history')}>
+
+      {isMerchant && (
+        <div className="auth-option" onClick={() => handleNav('products')}>
+          Products
+        </div>
+      )}
+
+      <div className="auth-option" onClick={() => handleNav('transaction-history')}>
         Transaction History
       </div>
-      <div className="auth-option" onClick={() => navigate('user-detail')}>
+
+      <div className="auth-option" onClick={() => handleNav('user-detail')}>
         Account Detail
       </div>
+
       <div className="auth-option" onClick={logout}>
         Log Out
       </div>
@@ -140,6 +148,10 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
       <img src={appQrcode} alt="app-qrcode" />
     </div>
   );
+
+  const handleNav = (val: string) => {
+    navigate(val);
+  };
 
   return (
     <>
@@ -191,7 +203,8 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
                 placement="bottomRight"
                 title={<span>{userDetail?.email}</span>}
                 content={content}
-                trigger="click"
+                // trigger="click"
+
                 className="landing-avatar__container"
               >
                 <div className="landing-avatar__logo">
@@ -208,30 +221,6 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
         <div className="container">
           <div className="landing-header__left-side">
             <ShopLogo onClick={() => navigate('')} />
-            {/* <ul className="landing-header__nav-links">
-              <li>
-                <Link style={{ color: 'white' }} to={'wallet'}>
-                  Wallet
-                </Link>
-              </li>
-              <li>
-                <Link style={{ color: 'white' }} to={'about'}>
-                  About
-                </Link>
-              </li>
-              {token && isMerchant && (
-                <li>
-                  <Link style={{ color: 'white' }} to={'products'}>
-                    Products
-                  </Link>
-                </li>
-              )}
-              <li>
-                <Link style={{ color: 'white' }} to={'price'}>
-                  Pricing
-                </Link>
-              </li>
-            </ul> */}
           </div>
           <div className="landing-header__middle">
             <div className="landing-header__searchbar">
@@ -255,16 +244,6 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
 
           <div className="landing-header__right-side">
             <ShoppingCartOutlined onClick={handleOpenCart} />
-            {/* <Popover
-                  style={{ width: '600px' }}
-                  onVisibleChange={handlePopover}
-                  placement="bottomRight"
-                  title={<span>{userDetail?.email}</span>}
-                  content={content}
-                  trigger="click"
-                >
-                  <UserOutlined />
-                </Popover> */}
           </div>
         </div>
       </div>

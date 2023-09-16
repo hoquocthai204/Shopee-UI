@@ -1,5 +1,6 @@
+import { ChatIcon } from 'components/Icons';
 import { LandingLayout } from 'components/Layout';
-import LoginPage from 'features/auth/pages/LoginPage';
+import AuthPage from 'features/auth/pages/AuthPage';
 import RegisterPage from 'features/auth/pages/RegisterPage';
 import RechargeLayout from 'features/excharge/pages/RechargeLayout';
 import LandingPage from 'features/landing/pages/LandingPage';
@@ -22,13 +23,19 @@ const App: React.FunctionComponent<AppProps> = (props) => {
           <Route path="merchant/*" element={<MerchantLayout />} />
           <Route path="products/*" element={<ProductLayout />} />
           <Route path="transaction-history" element={<TransactionPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
+        <Route path="login" element={<AuthPage isLogin />} />
+        <Route path="register" element={<AuthPage />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+
+      <div className="support-chat">
+        <ChatIcon fill="#ee4d2d" />
+        <span>Chat</span>
+      </div>
     </>
   );
 };
