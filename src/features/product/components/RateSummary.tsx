@@ -2,11 +2,11 @@ import React from 'react';
 import { Rate } from 'antd';
 import { StarFilled } from '@ant-design/icons';
 
-interface RateComponentProps {
+interface RateSummaryProps {
   rateNumber: number;
 }
 
-const RateComponent: React.FunctionComponent<RateComponentProps> = ({ rateNumber }) => {
+const RateSummary: React.FunctionComponent<RateSummaryProps> = ({ rateNumber }) => {
   return (
     <div className="rate-container">
       <div className="rate__star">
@@ -17,4 +17,4 @@ const RateComponent: React.FunctionComponent<RateComponentProps> = ({ rateNumber
   );
 };
 
-export default RateComponent;
+export default RateSummary;

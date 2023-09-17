@@ -10,3 +10,4 @@ export * from './QrCodeIcon';
 export * from './ErrorIcon';
 export * from './ChatIcon';
 export * from './AddCartIcon';
+export * from './AvatarIcon';
