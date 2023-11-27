@@ -1,4 +1,4 @@
-import { Avatar, Rate } from 'antd';
+import { Rate } from 'antd';
 import { AvatarIcon } from 'components/Icons';
 import React, { useState } from 'react';
 
@@ -46,7 +46,7 @@ const ProductDetailReview: React.FunctionComponent<ProductDetailReviewProps> = (
       </div>
 
       <div className="review__comment-list">
-        {[1, 2].map((e, i) => (
+        {[1, 2, 3].map((e, i) => (
           <div key={i} className="review__comment-item">
             <div className="review__avatar-wrapper">
               {/* <img src="" alt="avatar" /> */}

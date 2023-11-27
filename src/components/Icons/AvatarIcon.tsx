@@ -18,7 +18,7 @@ const AvatarIcon: React.FunctionComponent<AvatarIconProps> = (props) => {
   };
   return (
     <svg
-      enable-background="new 0 0 15 15"
+      enableBackground="new 0 0 15 15"
       viewBox="0 0 15 15"
       x="0"
       y="0"

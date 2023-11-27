@@ -81,7 +81,7 @@ const TransactionPage: React.FunctionComponent<TransactionPageProps> = (props) =
     if (res) {
       const newData = res.map((e) => ({
         key: e.orderInfo.id,
-        image: e.orderInfo.productInfo.images[0],
+        image: e.orderInfo.productInfo.image,
         productInformation: e.orderInfo.productInfo,
         quantity: Math.abs(e.amount) / e.orderInfo.productInfo.price,
         totalAmount: Math.abs(e.amount),

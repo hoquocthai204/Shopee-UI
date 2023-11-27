@@ -7,13 +7,13 @@ import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ProductForm from '../components/ProductForm';
 import { ProductCard } from 'components/Common/ProductCard';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ProductPageProps {}
 
 export const productFormField = {
   name: 'Name',
   description: 'Description',
-  // images: 'images',
   price: 'Price',
   category: 'Category',
 };
@@ -26,6 +26,7 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
   const [productDeleteSelected, setProductDeleteSelected] = useState<number | undefined>(0);
   const token = useRef(localStorage.getItem('token')).current || '';
   const [productUpdateField, setProductUpdateField] = useState<ProductInfo>();
+  const navigate = useNavigate();
 
   const getProduct = useCallback(async () => {
     const res = await productApi.getAllPrivateProduct(localStorage.getItem('token') || '');
@@ -45,9 +46,13 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
     event: React.MouseEvent<HTMLSpanElement, MouseEvent>
   ) => {
     event.stopPropagation();
-    getProductDetail(id);
     setOpenEditModal(true);
+    navigate(`?edit-id=${id}`);
   };
+
+  useEffect(() => {
+    !openEditModal && navigate('/products');
+  }, [openEditModal]);
 
   const handleDelete = (
     id: number | undefined,
@@ -92,24 +97,13 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
         <div className="product__list-items">
           {productInfo &&
             productInfo.map((e, i) => (
-              // <Card
-              //   key={e.id}
-              //   style={{ width: 190 }}
-              //   hoverable
-              // actions={[
-              //   <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
-              //   <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
-              // ]}
-              //   cover={<img alt="example" src={''.toString()} />}
-              // >
-              //   <Meta title={e.name} description={e.price} />
-              // </Card>
               <ProductCard
                 actions={[
                   <EditOutlined onClick={(event) => handleEdit(e.id, event)} key="edit" />,
                   <DeleteOutlined onClick={(event) => handleDelete(e.id, event)} key="delete" />,
                 ]}
                 info={e}
+                key={i}
               />
             ))}
         </div>
@@ -118,7 +112,7 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
           visible={openCreateModal}
           setOpenModal={setOpenCreateModal}
           getProduct={getProduct}
-          isUpdateForm={false}
+          isUpdate={false}
           rules
         />
 
@@ -126,8 +120,8 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
           visible={openEditModal}
           setOpenModal={setOpenEditModal}
           getProduct={getProduct}
-          isUpdateForm={true}
-          productUpdateField={productUpdateField}
+          isUpdate={true}
+          // productUpdateField={productUpdateField}
         />
 
         <ModalComponent

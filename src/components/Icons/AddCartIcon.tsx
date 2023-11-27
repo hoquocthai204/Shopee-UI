@@ -6,7 +6,7 @@ interface AddCartIconProps {
 
 const AddCartIcon: React.FunctionComponent<AddCartIconProps> = (props) => {
   return (
-    <svg {...props} enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0">
+    <svg {...props} enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0">
       <g>
         <g>
           <polyline

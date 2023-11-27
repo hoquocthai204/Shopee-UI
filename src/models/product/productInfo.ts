@@ -2,8 +2,8 @@ export interface ProductInfo {
   id?: number;
   name: string;
   description: string;
-  images: any;
-  price: number;
+  image?: string;
+  price: any;
   merchantId?: number;
   category: string;
 }

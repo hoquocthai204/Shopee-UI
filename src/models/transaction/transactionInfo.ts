@@ -12,7 +12,7 @@ export interface TransactionInfo {
       id: number;
       name: string;
       description: string;
-      images: string[];
+      image: string;
       price: number;
       merchantId: number;
       category: string;

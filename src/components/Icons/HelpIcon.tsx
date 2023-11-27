@@ -7,7 +7,7 @@ interface HelpIconProps {
 const HelpIcon: React.FunctionComponent<HelpIconProps> = (props) => {
   return (
     <svg {...props} height="16" viewBox="0 0 16 16" width="16">
-      <g fill="none" fill-rule="evenodd" transform="translate(1)">
+      <g fill="none" fillRule="evenodd" transform="translate(1)">
         <circle cx="7" cy="8" r="7" stroke="currentColor"></circle>
         <path
           fill="currentColor"

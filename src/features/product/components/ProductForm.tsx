@@ -1,182 +1,208 @@
-import { Button, Form, Input, Modal, Upload, message } from 'antd';
+import { Button, Form, Input, Modal, Upload } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { UploadOutlined } from '@ant-design/icons';
+import imageApi from 'api/imageApi';
 import merchantApi from 'api/merchantApi';
 import productApi from 'api/productApi';
 import { ProductInfo } from 'models/product/productInfo';
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { productFormField } from '../pages/ProductPage';
-import { UploadFile } from 'antd/lib/upload/interface';
-import { LoadingOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { useForm } from 'antd/lib/form/Form';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 interface ProductFormProps {
   visible: boolean;
   rules?: true;
-  isUpdateForm: boolean;
+  isUpdate: boolean;
   setOpenModal: (value: boolean) => void;
   getProduct: () => void;
-  productUpdateField?: ProductInfo;
 }
 
 const ProductForm: React.FunctionComponent<ProductFormProps> = ({
   visible,
-  rules,
-  isUpdateForm,
+  isUpdate,
   setOpenModal,
   getProduct,
-  productUpdateField,
 }) => {
   const token = useRef(localStorage.getItem('token')).current || '';
-  const [imageUrl, setImageUrl] = useState<any>(null);
-  // const [loading, setLoading] = useState(false);
   const [form] = useForm();
+  const location = useLocation();
+  const [productUpdateId, setProductUpdateId] = useState<number | null>(null);
+  const [productUpdateData, setProductUpdateData] = useState<ProductInfo>();
+  const [fileList, setFileList] = useState<any[]>([]);
 
   const handleCreate = (data: ProductInfo) => {
-    const dataSend = {
-      ...data,
-      images: [imageUrl],
-    };
-    createProduct(dataSend);
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('file', file.originFileObj);
+    });
+    formData.append('upload_preset', 'mfs2nd1f');
+
+    createProduct(data, formData);
   };
 
-  const handleUpdate = (data: ProductInfo) => {
-    // updateProduct(productUpdateField?.id, data);
-  };
+  useEffect(() => {
+    visible &&
+      isUpdate &&
+      location.search &&
+      setProductUpdateId(Number(queryString.parse(location.search)['edit-id']));
+  }, [visible]);
 
-  const createProduct = useCallback(async (data: ProductInfo) => {
-    const merchant = await merchantApi.getMerchant(token);
-    console.log({
-      ...data,
-      // images: imageUrl,
-      merchantId: Number(merchant.id),
-    });
-    const res = await productApi.createProduct(token, {
-      ...data,
-      // images: imageUrl,
-      merchantId: Number(merchant.id),
-    });
+  useEffect(() => {
+    productUpdateId && getUpdateData(productUpdateId);
+  }, [visible, productUpdateId]);
 
+  const getUpdateData = useCallback(async (id: number) => {
+    const res = await productApi.getProduct(id);
     if (res) {
-      setOpenModal(false);
-      getProduct();
+      setProductUpdateData(res);
     }
-    form.resetFields();
   }, []);
 
-  const updateProduct = useCallback(async (id, data: ProductInfo) => {
-    await productApi.updateProduct(token, id, {
-      name: data.name || productUpdateField?.name || '',
-      description: data.description || productUpdateField?.description || '',
-      images: [data.images.fileList[0].toString() || productUpdateField?.images.fileList[0] || ''],
-      price: data.price || productUpdateField?.price || -1,
-      category: data.category || productUpdateField?.category || '',
+  const handleUpdate = (data: ProductInfo) => {
+    updateProduct(productUpdateData, data);
+  };
+
+  const createProduct = useCallback(async (data: ProductInfo, formData) => {
+    const merchant = await merchantApi.getMerchant(token);
+
+    imageApi.uploadImage(formData).then(async (response) => {
+      const res = await productApi.createProduct(token, {
+        ...data,
+        image: response.data.secure_url,
+        merchantId: Number(merchant.id),
+      });
+
+      if (res) {
+        setOpenModal(false);
+        getProduct();
+      }
+      form.resetFields();
     });
+  }, []);
+
+  const updateProduct = useCallback(async (productUpdateData, data: ProductInfo) => {
+    await productApi.updateProduct(token, productUpdateData.id, {
+      ...data,
+      image: productUpdateData?.image,
+    });
+
     setOpenModal(false);
     getProduct();
   }, []);
 
   const cloneUpdateData = () => {
-    let newData = { ...productUpdateField };
+    let newData = { ...productUpdateData };
     delete newData?.id;
     delete newData?.merchantId;
+    delete newData?.image;
     return newData;
   };
 
   const handleFileChange = (info: any) => {
-    setImageUrl(URL.createObjectURL(info.file));
+    setFileList(info.fileList);
   };
 
-  const handleRemove = () => {
-    setImageUrl('');
-  };
+  useEffect(() => {
+    if (!visible) {
+      setFileList([]);
+      form.resetFields();
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    productUpdateId && console.log(productUpdateId);
+  }, [productUpdateId]);
+
+  useEffect(() => {
+    visible && isUpdate && productUpdateData && form.setFieldsValue(cloneUpdateData());
+  }, [visible, isUpdate, productUpdateData]);
 
   return (
-    <>
-      <Modal
-        visible={visible}
-        footer={null}
-        centered
-        onOk={() => setOpenModal(false)}
-        onCancel={() => setOpenModal(false)}
-        className="product__modal"
-      >
-        <p className="product__modal-header">{isUpdateForm ? 'Edit Product' : 'Create Product'}</p>
-        {isUpdateForm && productUpdateField ? (
-          <Form
-            name="product"
-            initialValues={productUpdateField && cloneUpdateData()}
-            layout="vertical"
-            onFinish={(data) => handleUpdate(data)}
-            autoComplete="off"
-            className="product__form"
-          >
-            {Object.values(productFormField).map((e, i) => (
-              <Form.Item key={i} label={e} name={Object.keys(productFormField)[i]}>
-                <Input />
-              </Form.Item>
-            ))}
-
-            <Form.Item>
-              <Button
-                className="product__submit-btn"
-                type="primary"
-                size={'large'}
-                block
-                danger
-                htmlType="submit"
-              >
-                Update
-              </Button>
+    <Modal
+      visible={visible}
+      footer={null}
+      centered
+      onOk={() => setOpenModal(false)}
+      onCancel={() => setOpenModal(false)}
+      className="product__modal"
+    >
+      <p className="product__modal-header">{isUpdate ? 'Edit Product' : 'Create Product'}</p>
+      {isUpdate && productUpdateData ? (
+        <Form
+          form={form}
+          name="product"
+          layout="vertical"
+          onFinish={(data) => handleUpdate(data)}
+          autoComplete="off"
+          className="product__form"
+        >
+          {Object.values(productFormField).map((e, i) => (
+            <Form.Item key={i} label={e} name={Object.keys(productFormField)[i]}>
+              <Input />
             </Form.Item>
-          </Form>
-        ) : (
-          <Form
-            name="product"
-            initialValues={{}}
-            layout="vertical"
-            onFinish={handleCreate}
-            autoComplete="off"
-            className="product__form"
-          >
-            {Object.values(productFormField).map((e, i) => (
-              <Form.Item
-                key={i}
-                label={e}
-                name={Object.keys(productFormField)[i]}
-                rules={[{ required: true, message: `${e} is required` }]}
-              >
-                <Input />
-              </Form.Item>
-            ))}
+          ))}
 
-            <Form.Item label={'Image'}>
-              <Upload
-                onRemove={handleRemove}
-                onChange={handleFileChange}
-                beforeUpload={() => false}
-              >
-                <Button icon={<UploadOutlined />} style={{ padding: '8px' }}>
-                  Upload
-                </Button>
-              </Upload>
-              {imageUrl && <img style={{ width: '100%' }} src={imageUrl} alt="Uploaded" />}
+          <Form.Item>
+            <Button
+              className="product__submit-btn"
+              type="primary"
+              size={'large'}
+              block
+              danger
+              htmlType="submit"
+            >
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      ) : (
+        <Form
+          name="product"
+          initialValues={{}}
+          layout="vertical"
+          onFinish={handleCreate}
+          autoComplete="off"
+          className="product__form"
+          form={form}
+        >
+          {Object.values(productFormField).map((e, i) => (
+            <Form.Item
+              key={i}
+              label={e}
+              name={Object.keys(productFormField)[i]}
+              rules={[{ required: true, message: `${e} is required` }]}
+            >
+              <Input />
             </Form.Item>
+          ))}
 
-            <Form.Item>
-              <Button
-                className="product__submit-btn"
-                type="primary"
-                size={'large'}
-                block
-                danger
-                htmlType="submit"
-              >
-                Create
-              </Button>
-            </Form.Item>
-          </Form>
-        )}
-      </Modal>
-    </>
+          <Form.Item label={'Image'} name="image">
+            <Upload
+              beforeUpload={() => false}
+              listType="picture"
+              fileList={fileList}
+              onChange={handleFileChange}
+            >
+              <Button icon={<UploadOutlined />}>Upload Image</Button>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              className="product__submit-btn"
+              type="primary"
+              size={'large'}
+              block
+              danger
+              htmlType="submit"
+            >
+              Create
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+    </Modal>
   );
 };
 

@@ -32,7 +32,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
         </div>
 
         <div className="landing__list-items">
-          {productInfo && productInfo.map((e, i) => <ProductCard info={e} />)}
+          {productInfo && productInfo.map((e, i) => <ProductCard key={i} info={e} />)}
         </div>
 
         {/* {productInfo && (

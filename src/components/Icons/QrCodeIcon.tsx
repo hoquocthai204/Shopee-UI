@@ -7,7 +7,7 @@ interface QrCodeIconProps {
 const QrCodeIcon: React.FunctionComponent<QrCodeIconProps> = (props) => {
   return (
     <svg {...props} width="40" height="40" fill="none" className="sYzQJQ">
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#clip0)">
         <path
           fillRule="evenodd"
           clipRule="evenodd"

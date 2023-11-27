@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 import { ProductInfo } from 'models/product/productInfo';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
@@ -24,7 +24,7 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = (props) => {
     <Card
       hoverable
       style={{ width: 190, ...cardStyle }}
-      cover={<img alt="example" src={info.images} />}
+      cover={<img alt="example" src={info.image} />}
       onClick={() => handleSelect(info.id || 0)}
       className="product-card"
       {...props}

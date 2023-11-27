@@ -9,11 +9,13 @@ import { ProductInfo } from 'models/product/productInfo';
 import { WalletInformation } from 'models/wallet/walletInformation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CustomInputNumber from '../components/CustomInputNumber';
 import ProductDetailOption from '../components/ProductDetailOption';
 import RateSummary from '../components/RateSummary';
 import ProductDetailReview from '../components/ProductDetailReview';
+import { useAppSelector } from 'app/hooks';
+import { selectIsLoggedIn } from 'features/auth/authSlice';
 
 interface ProductDetailPageProps {}
 
@@ -26,6 +28,8 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   const [isEnoughBalance, setIsEnoughBalance] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<number | boolean>(false);
   const locate = useLocation();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const productId = Number(locate.pathname.split('/')[2]);
@@ -56,7 +60,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   }, [quantity]);
 
   const handleBuy = () => {
-    setOpenModal(true);
+    isLoggedIn ? setOpenModal(true) : navigate('/login');
   };
 
   useEffect(() => {
@@ -98,7 +102,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
             <div className="product-detail__container">
               <div className="product-detail__left-side">
                 <div className="product-detail__img-container">
-                  <img src={productDetail.images.toString()} alt="product" />
+                  <img src={productDetail.image} alt="product" />
                 </div>
               </div>
 
@@ -137,7 +141,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
                   <div className="product-category">
                     <p className="product__category-item">
                       <span>Danh Mục</span>
-                      <span>Ô Tô & Xe Máy & Xe Đạp</span>
+                      <span>{productDetail.category}</span>
                     </p>
                     <p className="product__category-item">
                       <span>Kho hàng</span>

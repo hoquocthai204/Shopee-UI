@@ -14,7 +14,7 @@ const productApi = {
     const url = `/products/private`;
     return axiosClient.get(url, config(token));
   },
-  createProduct(token: string, data: ProductInfo): Promise<ProductInfo> {
+  createProduct(token: string, data: ProductInfo | FormData): Promise<ProductInfo> {
     const url = `/products`;
     return axiosClient.post(url, data, config(token));
   },

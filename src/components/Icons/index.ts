@@ -11,3 +11,4 @@ export * from './ErrorIcon';
 export * from './ChatIcon';
 export * from './AddCartIcon';
 export * from './AvatarIcon';
+export * from './VoucherIcon';
