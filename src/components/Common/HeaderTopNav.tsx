@@ -101,27 +101,27 @@ const HeaderTopNav: React.FunctionComponent<HeaderTopNavProps> = (props) => {
           <span style={{ color: '#00F295' }}>Registered</span>
         </div>
       ) : (
-        <div className="auth-option" onClick={() => handleNav('merchant')}>
+        <div className="auth-option" onClick={() => handleNav('/merchant')}>
           <span>Merchant: </span>
           <span style={{ color: '#ccc' }}>Unregistered</span>
         </div>
       )}
 
-      <div className="auth-option" onClick={() => handleNav('recharge')}>
+      <div className="auth-option" onClick={() => handleNav('/recharge')}>
         Recharge
       </div>
 
       {isMerchant && (
-        <div className="auth-option" onClick={() => handleNav('products')}>
+        <div className="auth-option" onClick={() => handleNav('/products')}>
           Products
         </div>
       )}
 
-      <div className="auth-option" onClick={() => handleNav('transaction-history')}>
+      <div className="auth-option" onClick={() => handleNav('/transaction-history')}>
         Transaction History
       </div>
 
-      <div className="auth-option" onClick={() => handleNav('user-detail')}>
+      <div className="auth-option" onClick={() => handleNav('/user-detail')}>
         Account Detail
       </div>
 
@@ -140,6 +140,7 @@ const HeaderTopNav: React.FunctionComponent<HeaderTopNavProps> = (props) => {
   const handleNav = (val: string) => {
     navigate(val);
   };
+
   return (
     <div className="header-top__navbar">
       <div className="container">

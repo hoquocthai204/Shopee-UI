@@ -6,7 +6,7 @@ import { ModalComponent } from 'components/Common/ModalComponent';
 import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ProductForm from '../components/ProductForm';
-import { ProductCard } from 'components/Common/ProductCard';
+import { ProductCard } from 'components/Common';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ProductPageProps {}

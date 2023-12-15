@@ -17,4 +17,4 @@ const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = (props) => {
   );
 };
 
-export default Breadcrumb;
+export { Breadcrumb };

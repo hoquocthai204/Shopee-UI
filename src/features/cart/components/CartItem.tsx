@@ -3,9 +3,11 @@ import itemPromotionlogo from 'assets/images/cart_item_promotion.png';
 import CustomInputNumber from 'features/product/components/CustomInputNumber';
 import React, { useState } from 'react';
 
-interface ICartItemProps {}
+interface ICartItemProps {
+  isChecked: boolean;
+}
 
-const CartItem: React.FunctionComponent<ICartItemProps> = (props) => {
+const CartItem: React.FunctionComponent<ICartItemProps> = ({ isChecked }) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const handleChangeQuantity = (value: number) => {
@@ -14,7 +16,7 @@ const CartItem: React.FunctionComponent<ICartItemProps> = (props) => {
 
   return (
     <div className="cart__item">
-      <Checkbox />
+      <Checkbox checked={isChecked} />
 
       <div className="cart-item__info-wrapper">
         <div className="cart-item__img-cover">

@@ -2,7 +2,7 @@ import productApi from 'api/productApi';
 import slider1 from 'assets/images/banner_slider1.png';
 import banner1 from 'assets/images/header_banner1.png';
 import banner2 from 'assets/images/header_banner2.png';
-import { ProductCard } from 'components/Common/ProductCard';
+import { ProductCard } from 'components/Common';
 import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useState } from 'react';
 import Banner from '../components/Banner';
