@@ -2,6 +2,7 @@ import { ChatIcon } from 'components/Icons';
 import { LandingLayout } from 'components/Layout';
 import AuthPage from 'features/auth/pages/AuthPage';
 import CartPage from 'features/cart/pages/CartPage';
+import CheckoutPage from 'features/checkout/pages/CheckoutPage';
 import RechargeLayout from 'features/excharge/pages/RechargeLayout';
 import LandingPage from 'features/landing/pages/LandingPage';
 import MerchantLayout from 'features/merchant/layout/MerchantLayout';
@@ -30,6 +31,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
         <Route path="register" element={<AuthPage />} />
 
         <Route path="cart" element={<CartPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -1,4 +1,4 @@
-export interface OrderInformation {
+export interface OrderCreateInformation {
   id?: string;
   merchantId: number;
   currency: string;

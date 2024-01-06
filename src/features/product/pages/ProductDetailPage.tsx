@@ -1,20 +1,20 @@
 import orderApi from 'api/orderApi';
 import productApi from 'api/productApi';
 import walletApi from 'api/walletApi';
+import { useAppSelector } from 'app/hooks';
 import warrantyIcon from 'assets/images/warranty_icon.png';
-import { ModalComponent, Breadcrumb } from 'components/Common';
+import { Breadcrumb, ModalComponent } from 'components/Common';
 import { CoinIcon } from 'components/Icons/CoinIcon';
+import { selectIsLoggedIn } from 'features/auth/authSlice';
 import { ProductInfo } from 'models/product/productInfo';
 import { WalletInformation } from 'models/wallet/walletInformation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import QRCode from 'react-qr-code';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { encryptAES } from 'utils';
 import CustomInputNumber from '../components/CustomInputNumber';
 import ProductDetailOption from '../components/ProductDetailOption';
-import RateSummary from '../components/RateSummary';
 import ProductDetailReview from '../components/ProductDetailReview';
-import { useAppSelector } from 'app/hooks';
-import { selectIsLoggedIn } from 'features/auth/authSlice';
+import RateSummary from '../components/RateSummary';
 
 interface ProductDetailPageProps {}
 
@@ -59,7 +59,12 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   }, [quantity]);
 
   const handleBuy = () => {
-    isLoggedIn ? setOpenModal(true) : navigate('/login');
+    // isLoggedIn ? setOpenModal(true) : navigate('/login');
+    if (isLoggedIn) {
+      if (isEnoughBalance) {
+        createOrder();
+      } else setOpenModal(true);
+    } else navigate('/login');
   };
 
   useEffect(() => {
@@ -91,6 +96,14 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   const onChangeNumber = (value: number) => {
     value >= 1 && setQuantity(value);
   };
+
+  useEffect(() => {
+    orderId &&
+      navigate(
+        // `/cart?order=${encryptAES(orderId.toString(), process.env.REACT_APP_ENCRYPT_KEY || '')}`
+        `/cart?order=${orderId}`
+      );
+  }, [orderId]);
 
   return (
     <div className="container">
@@ -167,7 +180,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
         )}
       </div>
 
-      <ModalComponent
+      {/* <ModalComponent
         openModal={openModal}
         title={isEnoughBalance ? 'Buy Product' : 'Error'}
         onOk={isEnoughBalance ? () => createOrder() : () => {}}
@@ -175,9 +188,17 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
         description={
           isEnoughBalance ? 'Confirm to buy this product?' : 'No enough balance to buy this product'
         }
+      /> */}
+      <ModalComponent
+        noFooter
+        openModal={openModal}
+        title={'Error'}
+        onOk={createOrder}
+        setOpenModal={setOpenModal}
+        description={'No enough balance to buy this product'}
       />
 
-      <ModalComponent
+      {/* <ModalComponent
         noFooter
         title="Scan QR code to continue"
         openModal={orderId ? true : false}
@@ -193,7 +214,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
             />
           </div>
         }
-      />
+      /> */}
     </div>
   );
 };

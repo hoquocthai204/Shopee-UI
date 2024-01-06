@@ -11,7 +11,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
   const navigate = useNavigate();
 
   const handleOpenCart = () => {
-    navigate('cart');
+    // navigate('/cart');
   };
 
   return (

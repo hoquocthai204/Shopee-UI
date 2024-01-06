@@ -16,6 +16,29 @@
     border-radius: 8px;
     box-shadow: 0 0 5px #ccc;
 
+    .rechange__input-container {
+      position: relative;
+
+      span {
+        svg {
+          width: 20px;
+          height: 20px;
+
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          vertical-align: middle;
+        }
+      }
+
+      &:hover {
+        svg {
+          right: 35px;
+        }
+      }
+    }
+
     label {
       font-weight: 600;
     }

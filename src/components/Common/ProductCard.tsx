@@ -1,10 +1,12 @@
 import { Card } from 'antd';
+import { CoinIcon } from 'components/Icons';
 import { ProductInfo } from 'models/product/productInfo';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   info: ProductInfo;
+  isEdit?: boolean;
   [val: string]: any;
 }
 
@@ -13,7 +15,7 @@ const cardStyle = {
 };
 
 const ProductCard: React.FunctionComponent<ProductCardProps> = (props) => {
-  const { info } = props;
+  const { info, isEdit } = props;
   const navigate = useNavigate();
 
   const handleSelect = (id: number) => {
@@ -23,10 +25,10 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = (props) => {
   return (
     <Card
       hoverable
-      style={{ width: 190, ...cardStyle }}
+      style={{ ...cardStyle }}
       cover={<img alt="example" src={info.image} />}
       onClick={() => handleSelect(info.id || 0)}
-      className="product-card"
+      className={!isEdit ? 'product-card' : 'product-card product-card--edit'}
       {...props}
     >
       <div className="product-card__title">{info.name}</div>
@@ -52,7 +54,9 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = (props) => {
         <span className="product-card__category">Flash Sale</span>
       </div>
       <div className="product-card__description">
-        <span className="product-card__price">{info.price}</span>
+        <span className="product-card__price">
+          <CoinIcon /> {info.price}
+        </span>
         <span className="product-card__quantity-sold">Đã bán 4,3k</span>
       </div>
       <div className="product-card__favourite">Yêu thích</div>

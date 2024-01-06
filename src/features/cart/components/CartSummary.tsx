@@ -1,12 +1,14 @@
 import { Checkbox } from 'antd';
-import { VoucherIcon } from 'components/Icons';
+import { CoinIcon, VoucherIcon } from 'components/Icons';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CartSummaryProps {
   setIsCheckedAll: (val: boolean) => void;
   isCheckedAll: boolean;
   isFixed?: boolean;
   forwardedRef?: React.RefObject<HTMLDivElement>;
+  summaryPrice?: number;
 }
 
 const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
@@ -14,9 +16,16 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
   isCheckedAll,
   isFixed,
   forwardedRef,
+  summaryPrice,
 }) => {
+  const navigate = useNavigate();
+
   const handleCheckAll = () => {
     setIsCheckedAll(!isCheckedAll);
+  };
+
+  const handleSubmit = () => {
+    navigate('/checkout');
   };
 
   return (
@@ -44,10 +53,14 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
 
         <div className="cart-summary__price">
           <span>{`Tổng thanh toán (${1} Sản phẩm):`}</span>
-          <span>{`₫${0}`}</span>
+          <span>
+            <CoinIcon /> {`${summaryPrice}`}
+          </span>
         </div>
 
-        <button className="cart-summary__submit-btn">Mua Hàng</button>
+        <button className="cart-summary__submit-btn" onClick={handleSubmit}>
+          Mua Hàng
+        </button>
       </div>
     </div>
   );

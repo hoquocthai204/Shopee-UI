@@ -1,5 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import paymentApi from 'api/paymentApi';
+import { CoinIcon } from 'components/Icons';
 import React, { useCallback } from 'react';
 
 export interface RechargePageProps {}
@@ -56,11 +57,13 @@ const RechargePage: React.FunctionComponent<RechargePageProps> = (props) => {
           className="recharge__form"
         >
           <Form.Item
-            label="Amount"
+            label="Deposit amount"
             name="amount"
             rules={[{ required: true, message: 'Please input amount!' }]}
           >
-            <Input type="number" />
+            <div className="rechange__input-container">
+              <Input type="number" /> <CoinIcon />
+            </div>
           </Form.Item>
 
           <Form.Item>

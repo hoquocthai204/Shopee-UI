@@ -1,13 +1,12 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
-import Meta from 'antd/lib/card/Meta';
+import { Button } from 'antd';
 import productApi from 'api/productApi';
+import { ProductCard } from 'components/Common';
 import { ModalComponent } from 'components/Common/ModalComponent';
 import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import ProductForm from '../components/ProductForm';
-import { ProductCard } from 'components/Common';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ProductModifyModal from '../components/ProductModifyModal';
 
 interface ProductPageProps {}
 
@@ -16,6 +15,7 @@ export const productFormField = {
   description: 'Description',
   price: 'Price',
   category: 'Category',
+  image: 'Image',
 };
 
 const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
@@ -102,26 +102,25 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
                   <EditOutlined onClick={(event) => handleEdit(e.id, event)} key="edit" />,
                   <DeleteOutlined onClick={(event) => handleDelete(e.id, event)} key="delete" />,
                 ]}
+                isEdit
                 info={e}
                 key={i}
               />
             ))}
         </div>
 
-        <ProductForm
+        <ProductModifyModal
           visible={openCreateModal}
-          setOpenModal={setOpenCreateModal}
+          setVisible={setOpenCreateModal}
           getProduct={getProduct}
           isUpdate={false}
-          rules
         />
 
-        <ProductForm
+        <ProductModifyModal
           visible={openEditModal}
-          setOpenModal={setOpenEditModal}
+          setVisible={setOpenEditModal}
           getProduct={getProduct}
           isUpdate={true}
-          // productUpdateField={productUpdateField}
         />
 
         <ModalComponent
