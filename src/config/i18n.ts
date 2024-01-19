@@ -8,7 +8,8 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    lng: localStorage.getItem('lang') || 'vi',
+    fallbackLng: 'vi',
     detection: {
       order: ['queryString', 'cookie'],
       caches: ['cookie'],

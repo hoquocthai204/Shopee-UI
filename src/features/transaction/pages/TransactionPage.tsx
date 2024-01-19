@@ -35,9 +35,6 @@ const columns: ColumnsType<DataType> = [
         <div className="transaction__content">
           <span>{value?.name}</span>
           <span>{value?.description}</span>
-          <span>
-            <CoinIcon /> {value?.price}
-          </span>
         </div>
       );
     },

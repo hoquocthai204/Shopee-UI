@@ -29,7 +29,7 @@ const HeaderComponent: React.FunctionComponent<HeaderComponentProps> = ({
 
           {!disableSearch && (
             <div className="header__page-searchbar">
-              <input type="text" placeholder="SĂN SHOPEE LIVE -50%" />
+              <input type="text" placeholder="SHOPEE LIVE -50%" />
               <button>
                 <SearchIcon />
               </button>

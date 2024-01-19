@@ -1,33 +1,35 @@
 import { Rate } from 'antd';
 import { AvatarIcon } from 'components/Icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ProductDetailReviewProps {}
 
-const overviewArr = [
-  'tất cả',
-  '5 Sao (3,9k)',
-  '4 Sao (378)',
-  '3 Sao (135)',
-  '2 Sao (47)',
-  '1 Sao (119)',
-  'Có Bình luận (1,8k)',
-  'Có hình ảnh / video (861)',
-];
-
 const ProductDetailReview: React.FunctionComponent<ProductDetailReviewProps> = (props) => {
   const [starSelected, setStarSelected] = useState<number>(0);
+  const { t } = useTranslation();
+
+  const overviewArr = [
+    `tất cả`,
+    `5 ${t('product.detail.star')} (3,9k)`,
+    `4 ${t('product.detail.star')} (378)`,
+    `3 ${t('product.detail.star')} (135)`,
+    `2 ${t('product.detail.star')} (47)`,
+    `1 ${t('product.detail.star')} (119)`,
+    `${t('product.detail.comment')} (1,8k)`,
+    `${t('product.detail.image')} / ${t('product.detail.video')} (861)`,
+  ];
 
   const handleSelect = (val: number) => {
     setStarSelected(val);
   };
   return (
     <div className="review">
-      <div className="review__title">ĐÁNH GIÁ SẢN PHẨM</div>
+      <div className="review__title">{t('product.detail.review')}</div>
       <div className="review__rate-container">
         <div className="review__rate">
           <div className="review__score-wrapper">
-            <span className="review__rating-score">4.5</span> trên 5
+            <span className="review__rating-score">4.5</span> {t('product.detail.out_of')} 5
           </div>
           <Rate allowHalf disabled value={4.5} />
         </div>
@@ -49,7 +51,6 @@ const ProductDetailReview: React.FunctionComponent<ProductDetailReviewProps> = (
         {[1, 2, 3].map((e, i) => (
           <div key={i} className="review__comment-item">
             <div className="review__avatar-wrapper">
-              {/* <img src="" alt="avatar" /> */}
               <AvatarIcon />
             </div>
 

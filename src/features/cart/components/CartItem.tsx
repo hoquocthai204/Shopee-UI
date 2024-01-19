@@ -1,9 +1,12 @@
 import { Checkbox } from 'antd';
+import orderApi from 'api/orderApi';
 import itemPromotionlogo from 'assets/images/cart_item_promotion.png';
 import { CoinIcon } from 'components/Icons';
 import CustomInputNumber from 'features/product/components/CustomInputNumber';
 import { OrderGetInformation } from 'models/order/orderGetInformation';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface ICartItemProps {
   isChecked: boolean;
@@ -17,9 +20,22 @@ const CartItem: React.FunctionComponent<ICartItemProps> = ({
   disableQuantity,
 }) => {
   const [quantity, setQuantity] = useState<number>(1);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token') || '';
+  const { t } = useTranslation();
 
   const handleChangeQuantity = (value: number) => {
     value >= 1 && setQuantity(value);
+  };
+
+  const deleteOrder = useCallback(async (data) => {
+    try {
+      await orderApi.deleteOrder(token, data.id);
+    } catch (error) {}
+  }, []);
+
+  const handleDelete = () => {
+    navigate(`/products/${itemData.productInfo.id}`);
   };
 
   return (
@@ -37,7 +53,7 @@ const CartItem: React.FunctionComponent<ICartItemProps> = ({
         </div>
 
         <div className="cart-item__category-wrapper">
-          <span>{`Loại hàng hóa: ${itemData.productInfo.category}`}</span>
+          <span>{`${t('cart.type')}: ${itemData.productInfo.category}`}</span>
         </div>
       </div>
 
@@ -57,7 +73,9 @@ const CartItem: React.FunctionComponent<ICartItemProps> = ({
         <CoinIcon /> {itemData.productInfo.price * itemData.quantity}
       </span>
 
-      <span className="cart-item__option--remove">Xóa</span>
+      <span className="cart-item__option--remove" onClick={handleDelete}>
+        {t('cart.delete')}
+      </span>
     </div>
   );
 };

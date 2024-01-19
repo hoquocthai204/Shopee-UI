@@ -11,6 +11,7 @@ import { CoinIcon } from 'components/Icons/CoinIcon';
 import { authActions, selectIsLoggedIn, selectIsMerchant } from 'features/auth/authSlice';
 import { UserInformation } from 'models/user/userInformation';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderTopNavProps {}
@@ -23,6 +24,7 @@ const HeaderTopNav: React.FunctionComponent<HeaderTopNavProps> = (props) => {
   const [isMerchant, setIsMerchant] = useState<boolean>(false);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const isMerchantState = useAppSelector(selectIsMerchant);
+  const { t, i18n } = useTranslation();
 
   const getUserDetail = useCallback(async () => {
     const res = await userApi.getUserDetail(localStorage.getItem('token') || '').catch(() => {
@@ -90,43 +92,43 @@ const HeaderTopNav: React.FunctionComponent<HeaderTopNavProps> = (props) => {
   const content = (
     <div className="landing-header__option-container">
       <div className="auth-option">
-        Balance:{' '}
+        {t('landing.header.right_side.balance')}
         <span>
           <CoinIcon /> {balance}
         </span>
       </div>
       {isMerchant ? (
         <div className="auth-option">
-          <span>Merchant: </span>
-          <span style={{ color: '#00F295' }}>Registered</span>
+          <span>{t('landing.header.right_side.merchant')}: </span>
+          <span style={{ color: '#00F295' }}>{t('landing.header.right_side.registered')}</span>
         </div>
       ) : (
         <div className="auth-option" onClick={() => handleNav('/merchant')}>
-          <span>Merchant: </span>
-          <span style={{ color: '#ccc' }}>Unregistered</span>
+          <span>{t('landing.header.right_side.merchant')}: </span>
+          <span style={{ color: '#ccc' }}>{t('landing.header.right_side.unregistered')}</span>
         </div>
       )}
 
       <div className="auth-option" onClick={() => handleNav('/recharge')}>
-        Recharge
+        {t('landing.header.right_side.recharge')}
       </div>
 
       {isMerchant && (
         <div className="auth-option" onClick={() => handleNav('/products')}>
-          Products
+          {t('landing.header.right_side.products')}
         </div>
       )}
 
       <div className="auth-option" onClick={() => handleNav('/transaction-history')}>
-        Transaction History
+        {t('landing.header.right_side.tran_his')}
       </div>
 
       <div className="auth-option" onClick={() => handleNav('/user-detail')}>
-        Account Detail
+        {t('landing.header.right_side.acc_detail')}
       </div>
 
       <div className="auth-option" onClick={logout}>
-        Log Out
+        {t('landing.header.right_side.logout')}
       </div>
     </div>
   );
@@ -141,46 +143,66 @@ const HeaderTopNav: React.FunctionComponent<HeaderTopNavProps> = (props) => {
     navigate(val);
   };
 
+  const handleChangeLang = (value: string) => {
+    i18n.changeLanguage(value);
+    localStorage.setItem('lang', value);
+  };
+
+  const langContent = (
+    <div className="language-container">
+      <p className="language" onClick={() => handleChangeLang('vi')}>
+        Tiếng Việt
+      </p>
+      <p className="language" onClick={() => handleChangeLang('en')}>
+        English
+      </p>
+    </div>
+  );
+
   return (
     <div className="header-top__navbar">
       <div className="container">
         <div className="header-top__group">
-          <span className="header-top__nav">Kênh Người Bán</span>
+          <span className="header-top__nav">{t('landing.header.left_side.tag1')}</span>
           <div className="header-top__divider" />
           {!isLoggedIn && (
             <>
-              <span className="header-top__nav">Trở thành Người bán Shopee</span>
+              <span className="header-top__nav">{t('landing.header.left_side.tag2')}</span>
               <div className="header-top__divider" />
             </>
           )}
           <Popover content={downloadContent} placement="bottomLeft">
-            <span className="header-top__nav">Tải ứng dụng</span>
+            <span className="header-top__nav">{t('landing.header.left_side.tag3')}</span>
           </Popover>
           <div className="header-top__divider" />
-          <span className="header-top__nav">Kết nối</span>
+          <span className="header-top__nav">{t('landing.header.left_side.tag4')}</span>
         </div>
 
         <div className="header-top__group">
           <span className="header-top__nav">
-            <NotificationIcon style={{ width: '14px', height: '18px' }} /> Thông Báo
+            <NotificationIcon style={{ width: '14px', height: '18px' }} />
+            {t('landing.header.right_side.tag1')}
           </span>
           <span className="header-top__nav">
             <HelpIcon style={{ width: '18px', height: '18px' }} />
-            Hỗ Trợ
+            {t('landing.header.right_side.tag2')}
           </span>
           <span className="header-top__nav">
-            <TranslateIcon style={{ width: '16px', height: '16px' }} />
-            Tiếng Việt
-            <DownIcon />
+            <Popover placement="bottomRight" title={''} content={langContent}>
+              <TranslateIcon style={{ width: '16px', height: '16px' }} />
+              {t('landing.header.right_side.tag3')}
+              <DownIcon />
+            </Popover>
           </span>
+
           {!isLoggedIn ? (
             <>
-              <span className="header-top__nav" onClick={() => navigate('register')}>
-                Đăng Ký
+              <span className="header-top__nav" onClick={() => navigate('/register')}>
+                {t('landing.header.right_side.tag5')}
               </span>
               <div className="header-top__divider" />
-              <span className="header-top__nav" onClick={() => navigate('login')}>
-                Đăng Nhập
+              <span className="header-top__nav" onClick={() => navigate('/login')}>
+                {t('landing.header.right_side.tag6')}
               </span>
             </>
           ) : (

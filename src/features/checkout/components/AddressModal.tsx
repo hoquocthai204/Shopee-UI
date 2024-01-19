@@ -1,169 +1,103 @@
-import { Button, Form, Input, Modal, Tabs } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
-import { locationApi } from 'api/locationApi';
+import { Button, Modal } from 'antd';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  checkoutActions,
+  selectAddressIdChecked,
+  selectIsModifyAddressStep,
+  selectIsOpenAddressModal,
+  selectUpdateAddressSelected,
+} from '../checkoutSlice';
+import AddressList from './AddressList';
+import CreateAddressForm from './CreateAddressForm';
+import { addressApi } from 'api/addressApi';
+import orderApi from 'api/orderApi';
+import { OrderAddressRequest } from 'models';
+import { useLocation } from 'react-router-dom';
 
-interface AddressModalProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-}
+interface AddressModalProps {}
 
-const { TabPane } = Tabs;
-
-const AddressModal: React.FunctionComponent<AddressModalProps> = ({ isOpen, setIsOpen }) => {
+const AddressModal: React.FunctionComponent<AddressModalProps> = (props) => {
   const [loading, setLoading] = useState(false);
-  const [activeKey, setActiveKey] = useState<string>('1');
-  const [locationData, setLocationData] = useState<any>(null);
-  const [province, setProvince] = useState<string>('');
-  const [district, setDistrict] = useState<string>('');
-  const [form] = useForm();
+  const [orderId, setOrderId] = useState<number | null>(null);
+  const isOpenAddressModal = useSelector(selectIsOpenAddressModal);
+  const isModifyAddressStep = useAppSelector(selectIsModifyAddressStep);
+  const addressIdChecked = useAppSelector(selectAddressIdChecked);
+  const updateAddressSelected = useAppSelector(selectUpdateAddressSelected);
+  const token = localStorage.getItem('token') || '';
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const handleOk = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsOpen(false);
-    }, 1000);
+    orderId && updateOrderAddress(token, orderId, { addressId: addressIdChecked });
   };
-
-  const handleAddress = (data: any) => {
-    console.log(data);
-  };
-
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
-
-  const getLocationData = useCallback(async () => {
-    try {
-      const res = await locationApi.getVNLocation();
-      if (res) setLocationData(res.data);
-    } catch (error) {}
-  }, []);
 
   useEffect(() => {
-    isOpen && getLocationData();
-    !isOpen && form.resetFields();
-  }, [isOpen]);
+    const queryParams = new URLSearchParams(location.search);
+    if (location.search) {
+      const orderId = queryParams.get('state');
+      if (orderId) {
+        setOrderId(Number(orderId));
+      }
+    }
+  }, []);
+
+  const handleOpenAddressModal = (value: boolean) => {
+    isModifyAddressStep
+      ? dispatch(checkoutActions.setisModifyAddressStep(false))
+      : dispatch(checkoutActions.setIsOpenAddressModal(value));
+  };
+
+  useEffect(() => {
+    !isOpenAddressModal && dispatch(checkoutActions.setisModifyAddressStep(false));
+  }, [isOpenAddressModal]);
+
+  const updateOrderAddress = useCallback(
+    async (token: string, id: number, data: OrderAddressRequest) => {
+      const res = await orderApi.updateOrderAddress(token, id, data);
+      if (res) {
+        setLoading(false);
+        dispatch(checkoutActions.setIsOpenAddressModal(false));
+      }
+    },
+    []
+  );
 
   return (
     <Modal
-      visible={isOpen}
+      visible={isOpenAddressModal}
       centered
-      onOk={() => setIsOpen(false)}
-      onCancel={() => setIsOpen(false)}
-      className="address-modal"
-      footer={[
-        <Button key="back" danger ghost onClick={() => setIsOpen(false)}>
-          Hủy
-        </Button>,
-        <Button key="submit" danger type="primary" loading={loading} onClick={handleOk}>
-          Xác nhận
-        </Button>,
-      ]}
+      onOk={() => handleOpenAddressModal(false)}
+      onCancel={() => dispatch(checkoutActions.setIsOpenAddressModal(false))}
+      className={!isModifyAddressStep ? 'address-modal' : 'address-modal address-modal--edit'}
+      footer={
+        !isModifyAddressStep && [
+          <Button key="back" danger ghost onClick={() => handleOpenAddressModal(false)}>
+            {isModifyAddressStep ? 'Trở Lại' : 'Hủy'}
+          </Button>,
+          <Button key="submit" danger type="primary" loading={loading} onClick={handleOk}>
+            Xác nhận
+          </Button>,
+        ]
+      }
     >
       <div className="address-wrapper">
-        <p className="address-title">Địa Chỉ Người Nhận</p>
+        <p className="address-title">
+          {isModifyAddressStep ? (
+            !updateAddressSelected ? (
+              <span>Địa Chỉ Mới</span>
+            ) : (
+              <span>Cập nhật địa chỉ</span>
+            )
+          ) : (
+            <span>Địa Chỉ Của Tôi</span>
+          )}
+        </p>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleAddress}
-        autoComplete="off"
-        className="address-form"
-      >
-        <div className="address-form__field">
-          <Form.Item name={'userName'}>
-            <Input placeholder="Họ và Tên" />
-          </Form.Item>
-
-          <Form.Item name={'userPhone'}>
-            <Input placeholder="Số điện thoại" />
-          </Form.Item>
-        </div>
-
-        <div className="address-form__field">
-          <Form.Item name={'address'}>
-            <Input placeholder={'Tỉnh/ Thành phố, Quận/Huyện, Phường/Xã'} allowClear />
-          </Form.Item>
-        </div>
-
-        <Tabs
-          defaultActiveKey="1"
-          activeKey={activeKey}
-          onChange={(val) => setActiveKey(val)}
-          className="address-form__tabs"
-          centered
-        >
-          <TabPane tab="Tỉnh/ Thành phố" key="1" className="address-form__tab">
-            {locationData &&
-              locationData.map((e: any) => (
-                <li
-                  key={e.code}
-                  onClick={() => {
-                    setProvince(e.name);
-                    setActiveKey('2');
-                    form.setFieldsValue({ address: e.name });
-                  }}
-                >
-                  {e.name}
-                </li>
-              ))}
-          </TabPane>
-
-          <TabPane tab="Quận/Huyện" key="2" disabled={!province}>
-            {locationData &&
-              locationData
-                .filter((val: any) => val.name === province)
-                .map((e: any) =>
-                  e.districts.map((i: any) => (
-                    <li
-                      onClick={() => {
-                        setDistrict(i.name);
-                        setActiveKey('3');
-                        form.setFieldsValue({ address: `${province}, ${i.name}` });
-                      }}
-                      key={i.code}
-                    >
-                      {i.name}
-                    </li>
-                  ))
-                )}
-          </TabPane>
-
-          <TabPane tab="Phường/Xã" key="3" disabled={!district}>
-            {locationData &&
-              locationData
-                .filter((val: any) => val.name === province)
-                .map((e: any) =>
-                  e.districts
-                    .filter((val: any) => val.name === district)
-                    .map((i: any) =>
-                      i.wards.map((j: any) => (
-                        <li
-                          onClick={() => {
-                            setActiveKey('1');
-                            form.setFieldsValue({
-                              address: `${province}, ${district}, ${j.name}`,
-                            });
-                          }}
-                          key={j.code}
-                        >
-                          {j.name}
-                        </li>
-                      ))
-                    )
-                )}
-          </TabPane>
-        </Tabs>
-
-        <div className="address-form__field">
-          <Form.Item name={'detailAddress'}>
-            <Input placeholder="Địa chỉ cụ thể" />
-          </Form.Item>
-        </div>
-      </Form>
+      {isModifyAddressStep ? <CreateAddressForm /> : <AddressList />}
     </Modal>
   );
 };

@@ -1,5 +1,9 @@
-import { OrderCreateInformation } from 'models/order/orderCreateInformation';
-import { OrderGetInformation } from 'models/order/orderGetInformation';
+import {
+  OrderCreateInformation,
+  OrderGetInformation,
+  OrderStatus,
+  OrderAddressRequest,
+} from 'models';
 import axiosClient, { config } from './axiosClient';
 
 const orderApi = {
@@ -10,6 +14,22 @@ const orderApi = {
   getOrder(token: string, id: number): Promise<OrderGetInformation> {
     const url = `/orders/${id}`;
     return axiosClient.get(url, config(token));
+  },
+  updateOrderStatus(token: string, id: number, data: OrderStatus): Promise<OrderStatus> {
+    const url = `/orders/${id}/status`;
+    return axiosClient.patch(url, data, config(token));
+  },
+  deleteOrder(token: string, id: number): Promise<void> {
+    const url = `/orders/${id}`;
+    return axiosClient.delete(url, config(token));
+  },
+  updateOrderAddress(
+    token: string,
+    orderId: number,
+    data: OrderAddressRequest
+  ): Promise<OrderGetInformation> {
+    const url = `/orders/${orderId}`;
+    return axiosClient.patch(url, data, config(token));
   },
 };
 

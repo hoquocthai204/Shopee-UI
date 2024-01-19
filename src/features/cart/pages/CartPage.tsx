@@ -8,25 +8,26 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import CartSummary from '../components/CartSummary';
+import { useTranslation } from 'react-i18next';
 
 interface CartPageProps {}
 
 const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
-  const [quantity, setQuantity] = useState<number>(1);
   const [orderData, setOrderData] = useState<OrderGetInformation>();
   const [isCheckedAll, setIsCheckedAll] = useState<boolean>(false);
-  const [orderId, setOrderId] = useState<number | null>(null);
+  const [orderId, setOrderId] = useState<number>();
   const summaryRef = useRef<any>(null);
   const fixedSummaryRef = useRef<any>(null);
   const token = useRef(localStorage.getItem('token')).current || '';
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (location.search) {
-      const orderIdEncrypted = queryParams.get('order');
-      if (orderIdEncrypted) {
-        setOrderId(Number(orderIdEncrypted));
+      const orderId = queryParams.get('state');
+      if (orderId) {
+        setOrderId(Number(orderId));
       }
     }
   }, []);
@@ -44,10 +45,6 @@ const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
       setOrderData(res);
     }
   }, []);
-
-  const handleChangeQuantity = (value: number) => {
-    value >= 1 && setQuantity(value);
-  };
 
   const handleCheckAll = () => {
     setIsCheckedAll(!isCheckedAll);
@@ -77,26 +74,25 @@ const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
     <>
       {orderData && (
         <div className="cart">
-          <HeaderComponent title="Giỏ Hàng" />
+          <HeaderComponent title={t('cart.cart')} />
 
           <div className="cart-main-container">
             <div className="cart-main__content">
               <div className="cart-notification">
                 <img src={discountLogo} alt="free-ship-logo" />
 
-                <span>
-                  Nhấn vào mục Mã giảm giá ở cuối trang để hưởng miễn phí vận chuyển bạn nhé!
-                </span>
+                <span>{t('cart.notification')}</span>
               </div>
 
               <div className="cart__list-header">
                 <Checkbox checked={isCheckedAll} onClick={handleCheckAll}>
-                  Sản Phẩm
+                  {t('cart.title1')}
                 </Checkbox>
-                <span>Đơn giá</span>
-                <span>Số Lượng</span>
-                <span>Số Tiền</span>
-                <span>Thao Tác</span>
+
+                <span>{t('cart.title2')}</span>
+                <span>{t('cart.title3')}</span>
+                <span>{t('cart.title4')}</span>
+                <span>{t('cart.title5')}</span>
               </div>
 
               <div className="cart__list">
@@ -108,7 +104,7 @@ const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
               forwardedRef={summaryRef}
               setIsCheckedAll={setIsCheckedAll}
               isCheckedAll={isCheckedAll}
-              summaryPrice={orderData.productInfo.price * orderData.quantity}
+              orderData={orderData}
             />
           </div>
 
@@ -118,7 +114,7 @@ const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
               isFixed={true}
               setIsCheckedAll={setIsCheckedAll}
               isCheckedAll={isCheckedAll}
-              summaryPrice={orderData.productInfo.price * orderData.quantity}
+              orderData={orderData}
             />
           )}
         </div>

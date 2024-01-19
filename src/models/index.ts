@@ -10,16 +10,22 @@ export * from './setting/userFavoriteCurrency';
 /** User */
 export * from './user/user';
 
-/** Wallet */
+/** Payment */
+export * from './payment/paymentStatusInfo';
+export * from './payment/paymentStripeRequest';
+export * from './payment/paymentStripeResponse';
+export * from './payment/checkoutStatus';
 
 /** Authentication */
 export * from './authentication/loginInformation';
 export * from './authentication/loginResponseInfo';
 
-/** Notification */
+/** Order */
+export * from './order/orderCreateInformation';
+export * from './order/orderGetInformation';
+export * from './order/orderStatus';
+export * from './order/orderAddressRequest';
 
-/** OHLC */
-
-/** LP */
-
-/** Fiat */
+/** Address */
+export * from './address/addressRequest';
+export * from './address/addressResponse';

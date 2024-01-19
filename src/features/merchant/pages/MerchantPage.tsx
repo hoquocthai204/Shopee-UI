@@ -59,6 +59,7 @@ const MerchantPage: React.FunctionComponent<MerchantPageProps> = (props) => {
         >
           {Object.values(formData).map((e, i) => (
             <Form.Item
+              key={i}
               label={e}
               name={Object.keys(formData)[i]}
               rules={[{ required: true, message: `${e} is required` }]}

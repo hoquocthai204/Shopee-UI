@@ -7,7 +7,7 @@ interface BreadcrumbProps {}
 const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = (props) => {
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate(-1);
+    navigate('/');
   };
   return (
     <div className="breadcrumb" onClick={handleBack}>

@@ -1,18 +1,19 @@
 export interface OrderGetInformation {
-  expireTime: 'string';
+  expireTime: string;
+  addressId: number;
   id: number;
   merchantId: number;
   productInfo: {
-    category: 'string';
-    description: 'string';
+    category: string;
+    description: string;
     id: number;
-    image: 'string';
+    image: string;
     merchantId: number;
-    name: 'string';
+    name: string;
     price: number;
   };
-  qrContent: 'string';
-  qrcodeLink: 'string';
+  qrContent: string;
+  qrcodeLink: string;
   quantity: number;
   status:
     | 'CANCELED'
@@ -23,4 +24,5 @@ export interface OrderGetInformation {
     | 'PENDING'
     | 'REFUNDED'
     | 'REFUNDING';
+  userId: number;
 }

@@ -1,6 +1,9 @@
 import { Checkbox } from 'antd';
+import orderApi from 'api/orderApi';
 import { CoinIcon, VoucherIcon } from 'components/Icons';
-import React from 'react';
+import { OrderGetInformation } from 'models';
+import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface CartSummaryProps {
@@ -8,7 +11,7 @@ interface CartSummaryProps {
   isCheckedAll: boolean;
   isFixed?: boolean;
   forwardedRef?: React.RefObject<HTMLDivElement>;
-  summaryPrice?: number;
+  orderData: OrderGetInformation;
 }
 
 const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
@@ -16,17 +19,42 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
   isCheckedAll,
   isFixed,
   forwardedRef,
-  summaryPrice,
+  orderData,
 }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token') || '';
+  const { t } = useTranslation();
 
   const handleCheckAll = () => {
     setIsCheckedAll(!isCheckedAll);
   };
 
   const handleSubmit = () => {
-    navigate('/checkout');
+    updateOrderStatus(orderData);
+    navigate(`/checkout?state=${orderData.id}`);
   };
+
+  const updateOrderStatus = useCallback(async (data) => {
+    try {
+      const res = await orderApi.updateOrderStatus(token, data.id, { status: 'PENDING' });
+      console.log(res);
+    } catch (error) {
+      console.log('Error to update order status');
+    }
+  }, []);
+
+  const handleDelete = () => {
+    navigate(`/products/${orderData.productInfo.id}`);
+    // deleteOrder(orderData);
+  };
+
+  const deleteOrder = useCallback(async (data) => {
+    try {
+      await orderApi.deleteOrder(token, data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <div ref={forwardedRef} className={`cart-summary ${isFixed ? 'cart-summary--fixed' : ''}`}>
@@ -35,7 +63,7 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
           <VoucherIcon />
           Shopee Voucher
         </span>
-        <span>Chọn hoặc nhập mã</span>
+        <span>{t('cart.voucher')}</span>
       </div>
 
       <div className="cart-summary__checkout-container">
@@ -45,21 +73,23 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
             checked={isCheckedAll}
             onClick={handleCheckAll}
           >
-            Chọn Tất Cả
+            {t('cart.select_all')}
           </Checkbox>
-          <button className="cart-summary__checkout__option">Xóa</button>
-          <button className="cart-summary__checkout__option">Lưu vào mục Đã thích</button>
+          <button className="cart-summary__checkout__option" onClick={handleDelete}>
+            {t('cart.delete')}
+          </button>
+          <button className="cart-summary__checkout__option">{t('cart.save')}</button>
         </div>
 
         <div className="cart-summary__price">
-          <span>{`Tổng thanh toán (${1} Sản phẩm):`}</span>
+          <span>{`${t('cart.summary')} (${1} ${t('cart.product')}):`}</span>
           <span>
-            <CoinIcon /> {`${summaryPrice}`}
+            <CoinIcon /> {`${orderData.productInfo.price * orderData.quantity}`}
           </span>
         </div>
 
         <button className="cart-summary__submit-btn" onClick={handleSubmit}>
-          Mua Hàng
+          {t('cart.submit_btn')}
         </button>
       </div>
     </div>

@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authActions } from '../authSlice';
 import { AuthForm } from '../components/AuthForm';
+import { useTranslation } from 'react-i18next';
 
 interface AuthPageProps {
   isLogin?: boolean;
@@ -22,6 +23,7 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const handleNavigate = () => {
     navigate('/');
@@ -78,23 +80,25 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
           <div className="auth-header__img-container">
             <ShopeeLogo onClick={handleNavigate} />
           </div>
-          <span>{isLogin ? 'Đăng nhập' : 'Đăng ký'}</span>
+          <span>{isLogin ? t('auth.login.signin') : t('auth.register.signup')}</span>
         </div>
-        <div className="auth-header__right-side">Bạn cần giúp đỡ?</div>
+        <div className="auth-header__right-side">{t('auth.support')}</div>
       </div>
 
       <div className="auth-content">
         <div className="auth-content__wrapper">
           <div className="auth-content__container">
             <div className="auth-content__header">
-              <span className="auth-content__title">{isLogin ? 'Đăng nhập' : 'Đăng ký'}</span>
+              <span className="auth-content__title">
+                {isLogin ? t('auth.login.signin') : t('auth.register.signup')}
+              </span>
 
               {isLogin && (
                 <div className="auth-content__option">
-                  <div className="auth-content__option-alert">
-                    Đăng nhập với mã <br />
-                    QR
-                  </div>
+                  <div
+                    className="auth-content__option-alert"
+                    dangerouslySetInnerHTML={{ __html: t('auth.login.qrlabel') }}
+                  />
                   <QrCodeIcon />
                 </div>
               )}
@@ -111,20 +115,20 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
                 initialValue={initialValue}
                 onSubmit={onSubmit}
                 onFail={handleFail}
-                submitType={isLogin ? 'Đăng nhập' : 'Đăng ký'}
+                submitType={isLogin ? t('auth.login.signin') : t('auth.register.signup')}
               />
             </div>
 
             <div className="auth-content__navs">
               {isLogin && (
                 <>
-                  <span>Quên mật khẩu</span>
-                  <span>Đăng nhập với SMS</span>
+                  <span>{t('auth.login.fogot')}</span>
+                  <span>{t('auth.login.sms')}</span>
                 </>
               )}
             </div>
 
-            <Divider plain>HOẶC</Divider>
+            <Divider plain>{t('auth.or')}</Divider>
 
             <div className="auth-content__option-box">
               <button>
@@ -137,11 +141,13 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
 
             {isLogin ? (
               <p className="auth-content_other-option">
-                Bạn mới biết đến Shopee? <span onClick={handleNavSignup}>Đăng ký</span>
+                {t('auth.login.other_option_label')}{' '}
+                <span onClick={handleNavSignup}>{t('auth.register.signup')}</span>
               </p>
             ) : (
               <p className="auth-content_other-option">
-                Bạn đã có tài khoản? <span onClick={handleNavSignin}>Đăng nhập</span>
+                {t('auth.register.other_option_label')}{' '}
+                <span onClick={handleNavSignin}>{t('auth.register.login')}</span>
               </p>
             )}
           </div>

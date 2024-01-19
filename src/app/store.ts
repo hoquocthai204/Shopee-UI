@@ -1,5 +1,6 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import authReducer from 'features/auth/authSlice';
+import checkoutReducer from 'features/checkout/checkoutSlice';
 import homeReducer from 'features/home/homeSlice';
 import landingReducer from 'features/landing/landingSlice';
 
@@ -8,6 +9,7 @@ export const store = configureStore({
     landing: landingReducer,
     auth: authReducer,
     home: homeReducer,
+    checkout: checkoutReducer,
   },
 });
 

@@ -1,6 +1,9 @@
-import { PaymentStatusInfo } from 'models/payment/paymentStatusInfo';
-import { PaymentStripeRequest } from 'models/payment/paymentStripeRequest';
-import { PaymentStripeResponse } from 'models/payment/paymentStripeResponse';
+import {
+  CheckoutStatus,
+  PaymentStripeRequest,
+  PaymentStripeResponse,
+  PaymentStatusInfo,
+} from 'models';
 import axiosClient, { config } from './axiosClient';
 
 const paymentApi = {
@@ -10,6 +13,10 @@ const paymentApi = {
   },
   checkPaymentStatus(sessionId: String, token: string): Promise<PaymentStatusInfo> {
     const url = `/payment/check/${sessionId}`;
+    return axiosClient.get(url, config(token));
+  },
+  payment(token: string, id: number): Promise<CheckoutStatus> {
+    const url = `/payment/${id}`;
     return axiosClient.get(url, config(token));
   },
 };

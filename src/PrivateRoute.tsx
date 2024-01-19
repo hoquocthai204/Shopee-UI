@@ -12,7 +12,6 @@ export default function PrivateRoute(props: RouteProps) {
       const res = await userApi
         .getUserDetail(localStorage.getItem('token') || '')
         .catch((error) => {
-          console.log(error.response.data);
           dispatch(authActions.setIsLoggedIn(true));
         });
       if (res) {

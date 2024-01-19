@@ -10,11 +10,11 @@ import { ProductInfo } from 'models/product/productInfo';
 import { WalletInformation } from 'models/wallet/walletInformation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { encryptAES } from 'utils';
 import CustomInputNumber from '../components/CustomInputNumber';
 import ProductDetailOption from '../components/ProductDetailOption';
 import ProductDetailReview from '../components/ProductDetailReview';
 import RateSummary from '../components/RateSummary';
+import { useTranslation } from 'react-i18next';
 
 interface ProductDetailPageProps {}
 
@@ -26,6 +26,8 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   const [walletInfo, setWalletInfo] = useState<WalletInformation>();
   const [isEnoughBalance, setIsEnoughBalance] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<number | boolean>(false);
+  const { t } = useTranslation();
+
   const locate = useLocation();
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const navigate = useNavigate();
@@ -59,7 +61,6 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   }, [quantity]);
 
   const handleBuy = () => {
-    // isLoggedIn ? setOpenModal(true) : navigate('/login');
     if (isLoggedIn) {
       if (isEnoughBalance) {
         createOrder();
@@ -98,11 +99,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   };
 
   useEffect(() => {
-    orderId &&
-      navigate(
-        // `/cart?order=${encryptAES(orderId.toString(), process.env.REACT_APP_ENCRYPT_KEY || '')}`
-        `/cart?order=${orderId}`
-      );
+    orderId && navigate(`/cart?state=${orderId}`);
   }, [orderId]);
 
   return (
@@ -130,9 +127,9 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
 
                 <div className="product-detail__category-container">
                   <div className="product-detail__quantity">
-                    <span>Số Lượng</span>
+                    <span>{t('product.detail.quantity')}</span>
                     <CustomInputNumber value={quantity} onChange={onChangeNumber} />
-                    <span>12013 sản phẩm có sẵn</span>
+                    <span>12013 {t('product.detail.available')}</span>
                   </div>
                 </div>
 
@@ -140,27 +137,27 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
 
                 <div className="product-detail__warranty">
                   <img src={warrantyIcon} alt="warranty icon" />
-                  <span>Shopee Đảm Bảo</span>
-                  <span>3 Ngày Trả Hàng / Hoàn Tiền</span>
+                  <span>{t('product.detail.warranty')}</span>
+                  <span>3 {t('product.detail.refund_day')}</span>
                 </div>
               </div>
             </div>
 
             <div className="product-detail__container column">
               <div className="product-detail__content">
-                <h2 className="product-content__header">CHI TIẾT SẢN PHẨM</h2>
+                <h2 className="product-content__header">{t('product.detail.detail')}</h2>
                 <div className="product-content__description">
                   <div className="product-category">
                     <p className="product__category-item">
-                      <span>Danh Mục</span>
+                      <span>{t('product.detail.type')}</span>
                       <span>{productDetail.category}</span>
                     </p>
                     <p className="product__category-item">
-                      <span>Kho hàng</span>
+                      <span>{t('product.detail.warehouse')}</span>
                       <span>19408424</span>
                     </p>
                     <p className="product__category-item">
-                      <span>Gửi từ</span>
+                      <span>{t('product.detail.from')}</span>
                       <span>Hà Nội</span>
                     </p>
                   </div>
@@ -168,7 +165,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
               </div>
 
               <div className="product-detail__content">
-                <h2 className="product-content__header">MÔ TẢ SẢN PHẨM</h2>
+                <h2 className="product-content__header">{t('product.detail.description')}</h2>
                 <div className="product-content__description">{productDetail.description}</div>
               </div>
             </div>
@@ -180,41 +177,14 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
         )}
       </div>
 
-      {/* <ModalComponent
-        openModal={openModal}
-        title={isEnoughBalance ? 'Buy Product' : 'Error'}
-        onOk={isEnoughBalance ? () => createOrder() : () => {}}
-        setOpenModal={setOpenModal}
-        description={
-          isEnoughBalance ? 'Confirm to buy this product?' : 'No enough balance to buy this product'
-        }
-      /> */}
       <ModalComponent
         noFooter
         openModal={openModal}
         title={'Error'}
         onOk={createOrder}
         setOpenModal={setOpenModal}
-        description={'No enough balance to buy this product'}
+        description={t('product.detail.alert_modal')}
       />
-
-      {/* <ModalComponent
-        noFooter
-        title="Scan QR code to continue"
-        openModal={orderId ? true : false}
-        onOk={isEnoughBalance ? () => createOrder() : () => {}}
-        setOpenModal={setOrderId}
-        description={
-          <div style={{ height: 'auto', margin: '0 auto', maxWidth: 200, width: '100%' }}>
-            <QRCode
-              size={256}
-              style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-              value={orderId.toString()}
-              viewBox={`0 0 256 256`}
-            />
-          </div>
-        }
-      /> */}
     </div>
   );
 };

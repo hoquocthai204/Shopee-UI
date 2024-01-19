@@ -1,5 +1,5 @@
 .address-form__tabs {
-  max-height: 280px;
+  height: 280px;
 
   .ant-tabs-nav {
     margin: 0;
@@ -61,6 +61,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 600px;
 
     .ant-modal-close {
       display: none;
@@ -82,22 +83,35 @@
     .ant-modal-body {
       padding: 0;
 
-      .address-title {
-        font-size: 20px;
-        padding: 16px 24px;
-        font-weight: 500px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+      .address-wrapper {
+        .address-title {
+          display: flex;
+          align-items: center;
+          height: 64px;
+          font-size: 20px;
+          padding: 0 24px;
+          font-weight: 500px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+        }
       }
 
       .address-form {
         padding: 0 24px;
         padding-top: 15px;
 
+        .ant-tabs + .address-form__field {
+          margin-top: 10px;
+        }
+
         .address-form__field {
           display: flex;
           justify-content: space-between;
           gap: 16px;
-          margin-bottom: 15px;
+          // margin-bottom: 15px;
+
+          .ant-form-item-explain {
+            display: none;
+          }
 
           .ant-select-selection-item {
             border: none;
@@ -122,10 +136,129 @@
             }
           }
 
-          &:last-child {
-            margin: 15px 0;
+          + .address-form__field {
+            margin-top: 15px;
           }
         }
+
+        .address-form__options {
+          text-align: right;
+          margin-top: 15px;
+          button {
+            width: 140px;
+            height: 40px;
+
+            + button {
+              margin-left: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .address-list {
+    padding: 0 0 0 20px;
+
+    .ant-space {
+      overflow: hidden;
+      overflow-y: scroll;
+      height: 420px;
+      gap: 0 !important;
+
+      .ant-space-item {
+        + .ant-space-item {
+          border-top: 1px solid rgba(0, 0, 0, 0.09);
+        }
+        .address-card {
+          padding: 16px 0 16px 4px;
+          margin: 0;
+          cursor: default;
+
+          .ant-radio {
+            top: 0;
+            + * {
+              padding: 0 0 0 12px;
+              display: flex;
+            }
+          }
+
+          &__info {
+            .address-card__general {
+              white-space: nowrap;
+              display: flex;
+              align-content: center;
+              margin-bottom: 4px;
+
+              .address-card__name {
+                color: rgba(0, 0, 0, 0.87);
+                font-size: 16px;
+                line-height: 1.5rem;
+                font-weight: 500;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+                padding-right: 8px;
+                border-right: 0.5px solid rgba(0, 0, 0, 0.26);
+              }
+
+              .address-card__phone {
+                font-size: 14px;
+                line-height: 1.25rem;
+                color: rgba(0, 0, 0, 0.54);
+                padding-left: 8px;
+              }
+              // styles for general info
+            }
+
+            .address-card__description {
+              font-size: 14px;
+              line-height: 20px;
+              color: rgba(0, 0, 0, 0.54);
+              // styles for description
+            }
+          }
+
+          &__option {
+            button {
+              border: none;
+              background-color: transparent;
+              color: #08f;
+              box-shadow: none;
+            }
+            // styles for options
+          }
+        }
+      }
+    }
+
+    .address__add-btn {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ee4d2d;
+      color: #ee4d2d;
+      padding: 10px;
+      height: 40px;
+      margin-bottom: 10px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      svg {
+        margin-right: 8px;
+      }
+
+      &--empty {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  &--edit {
+    .ant-modal-content {
+      height: unset;
+      .address-form {
+        padding-bottom: 15px !important;
       }
     }
   }
@@ -134,6 +267,7 @@
 .checkout {
   background-color: #f5f5f5;
   padding-bottom: 70px;
+  min-height: calc(100vh - 174px);
 
   .checkout__dash-line {
     height: 3px;
@@ -203,6 +337,7 @@
           padding: 2px 5px;
           border-radius: 1px;
           margin-left: 15px;
+          white-space: nowrap;
         }
       }
       .checkout__change-btn {
@@ -212,6 +347,7 @@
         font-size: 14px;
         cursor: pointer;
         user-select: none;
+        white-space: nowrap;
       }
     }
   }
@@ -282,7 +418,7 @@
             }
           }
           .checkout__product-name {
-            line-height: 1.2;
+            line-height: 20px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -382,6 +518,7 @@
           text-transform: uppercase;
           background-color: white;
           user-select: none;
+          text-transform: uppercase;
         }
       }
     }
@@ -455,6 +592,65 @@
         &:hover {
           background-color: #f05d40;
         }
+      }
+    }
+  }
+
+  .checkout-alert {
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    width: 400px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.03);
+    border: 1px solid #ee4d2d;
+    gap: 40px;
+
+    span {
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkout-alert__nav-btn {
+      height: 40px;
+    }
+  }
+}
+
+.confirm-modal {
+  width: 400px !important;
+
+  .confirm-modal__description {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ant-modal-footer {
+    text-align: center;
+    .ant-btn {
+      width: 140px;
+      height: 40px;
+    }
+  }
+
+  &--success {
+    .ant-modal-footer {
+      .ant-btn {
+        width: unset;
+        height: 40px;
       }
     }
   }

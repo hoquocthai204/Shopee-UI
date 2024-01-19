@@ -25,6 +25,9 @@ const authSlice = createSlice({
     setIsMerchant(state, action) {
       state.isMerchant = action.payload;
     },
+    setCurrentUser(state, action) {
+      state.currentUser = action.payload;
+    },
   },
   extraReducers: {},
 });
@@ -34,8 +37,8 @@ export const authActions = authSlice.actions;
 
 // Selectors
 export const selectIsLoggedIn = (state: any) => state.auth.isLoggedIn;
-export const selectIsLogging = (state: any) => state.auth.logging;
 export const selectIsMerchant = (state: any) => state.auth.isMerchant;
+export const selectCurrentUser = (state: any) => state.auth.currentUser;
 export const selectStates = (state: any) => state.auth;
 
 // Reducer
