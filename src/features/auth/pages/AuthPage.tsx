@@ -51,7 +51,8 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
 
   const handleAuth = useCallback(async (body: AuthInformation) => {
     const res = await authApi.login(body).catch((error: any) => {
-      if (error.response) setError(error.response.data.message);
+      // if (error.response) setError(error.response.data.message);
+      if (error.response) setError('Account is existed');
     });
 
     if (res) {
