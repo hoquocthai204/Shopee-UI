@@ -27,7 +27,9 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
     <div className="container">
       <div className="landing-content">
         <Banner slider1={slider1} banner1={banner1} banner2={banner2} />
+
         <CategoryContainer />
+
         <div className="landing-content__header">
           <span>DAILY DISCOVER</span>
         </div>
