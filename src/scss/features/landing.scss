@@ -431,11 +431,20 @@
           }
 
           span {
-            text-align: center;
             max-width: 100px;
+            text-align: center;
             overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Số dòng tối đa */
+            -webkit-box-orient: vertical;
+            height: 32px; /* Chiều cao tối đa của 2 dòng */
+            line-height: 16px; /* Chiều cao mỗi dòng */
             text-overflow: ellipsis;
-            max-height: 28px;
+          }
+
+          &:hover {
+            padding-top: 10px;
+            justify-content: flex-start;
           }
         }
       }
