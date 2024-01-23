@@ -8,10 +8,18 @@ export interface AuthFormProps {
   onSubmit: (formValues: AuthInformation) => void;
   onFail?: (errorInfo: ValidateErrorEntity<AuthInformation>) => void;
   submitType?: string;
+  isLoading: boolean;
 }
 
-export const AuthForm = ({ initialValue, onSubmit, onFail, submitType }: AuthFormProps) => {
+export const AuthForm = ({
+  initialValue,
+  onSubmit,
+  onFail,
+  submitType,
+  isLoading,
+}: AuthFormProps) => {
   const { t } = useTranslation();
+
   return (
     <Form
       name="auth"
@@ -23,22 +31,33 @@ export const AuthForm = ({ initialValue, onSubmit, onFail, submitType }: AuthFor
     >
       <Form.Item
         name="email"
-        rules={[{ required: true, message: 'Please input your email!' }]}
+        rules={[{ required: true, message: t('auth.input_email_alert') }]}
         className="auth__input-container"
       >
-        <Input className="auth__input" placeholder={t('auth.placeholder1')} />
+        <Input className="auth__input" placeholder={t('auth.placeholder1')} disabled={isLoading} />
       </Form.Item>
 
       <Form.Item
         name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        rules={[{ required: true, message: t('auth.input_pass_alert') }]}
         className="auth__input-container"
       >
-        <Input.Password className="auth__input" placeholder={t('auth.placeholder2')} />
+        <Input.Password
+          className="auth__input"
+          placeholder={t('auth.placeholder2')}
+          disabled={isLoading}
+        />
       </Form.Item>
 
       <Form.Item>
-        <Button className="auth__submit" type="primary" block danger htmlType="submit">
+        <Button
+          className="auth__submit"
+          type="primary"
+          block
+          danger
+          htmlType="submit"
+          loading={isLoading}
+        >
           {submitType || 'Submit'}
         </Button>
       </Form.Item>

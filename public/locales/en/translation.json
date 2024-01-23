@@ -99,6 +99,11 @@
     "or": "OR",
     "support": "Need help?",
 
+    "account_existed": "Account is existed",
+    "wrong_user_pass": "The username or password is incorrect",
+    "input_email_alert": "Please input your email!",
+    "input_pass_alert": "Please input your password!",
+
     "register": {
       "signup": "Sign Up",
       "other_option_label": "Already have an account?",

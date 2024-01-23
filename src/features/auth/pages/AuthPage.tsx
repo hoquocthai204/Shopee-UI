@@ -22,6 +22,7 @@ const initialValue = {
 const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -46,13 +47,13 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
   };
 
   const onSubmit = (values: any) => {
+    setIsLoading(true);
     isLogin ? handleAuth(values) : handleRegister(values);
   };
 
   const handleAuth = useCallback(async (body: AuthInformation) => {
     const res = await authApi.login(body).catch((error: any) => {
-      // if (error.response) setError(error.response.data.message);
-      if (error.response) setError('Account is existed');
+      if (error.response) setError(t('auth.wrong_user_pass'));
     });
 
     if (res) {
@@ -60,16 +61,19 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
       localStorage.setItem('token', res.token);
       navigate('/');
     }
+
+    setIsLoading(false);
   }, []);
 
   const handleRegister = useCallback(
     async (body: AuthInformation) => {
       const res = await authApi.register(body).catch((error: any) => {
-        if (error.response) setError(error.response.data.message);
+        if (error.response) setError(t('auth.account_existed'));
       });
       if (res) {
         navigate('/login');
       }
+      setIsLoading(false);
     },
     [navigate]
   );
@@ -116,6 +120,7 @@ const AuthPage: React.FunctionComponent<AuthPageProps> = ({ isLogin }) => {
                 initialValue={initialValue}
                 onSubmit={onSubmit}
                 onFail={handleFail}
+                isLoading={isLoading}
                 submitType={isLogin ? t('auth.login.signin') : t('auth.register.signup')}
               />
             </div>

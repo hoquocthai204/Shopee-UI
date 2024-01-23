@@ -7,6 +7,7 @@ import { ProductInfo } from 'models/product/productInfo';
 import React, { useCallback, useEffect, useState } from 'react';
 import Banner from '../components/Banner';
 import CategoryContainer from '../components/CategoryContainer';
+import { Skeleton } from 'antd';
 
 interface LandingPageProps {}
 
@@ -32,7 +33,11 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
         </div>
 
         <div className="landing__list-items">
-          {productInfo && productInfo.map((e, i) => <ProductCard key={i} info={e} />)}
+          {productInfo
+            ? productInfo.map((e, i) => <ProductCard key={i} info={e} />)
+            : Array.from({ length: 6 }, () => Math.random()).map((e, i) => (
+                <Skeleton key={i} active />
+              ))}
         </div>
 
         {/* {productInfo && (

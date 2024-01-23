@@ -99,6 +99,11 @@
     "or": "HOẶC",
     "support": "Bạn cần giúp đỡ?",
 
+    "account_existed": "Tài khoản đã tồn tại",
+    "wrong_user_pass": "Tên người dùng hoặc mật khẩu không chính xác",
+    "input_email_alert": "Vui lòng nhập email của bạn!",
+    "input_pass_alert": "Vui lòng nhập mật khẩu của bạn!",
+
     "register": {
       "signup": "Đăng ký",
       "other_option_label": "Bạn đã có tài khoản?",

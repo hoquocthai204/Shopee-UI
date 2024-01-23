@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
 import productApi from 'api/productApi';
 import { ProductCard } from 'components/Common';
 import { ModalComponent } from 'components/Common/ModalComponent';
@@ -25,7 +25,6 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [productDeleteSelected, setProductDeleteSelected] = useState<number | undefined>(0);
   const token = useRef(localStorage.getItem('token')).current || '';
-  const [productUpdateField, setProductUpdateField] = useState<ProductInfo>();
   const navigate = useNavigate();
 
   const getProduct = useCallback(async () => {
@@ -68,13 +67,6 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
     getProduct();
   }, []);
 
-  const getProductDetail = useCallback(async (id) => {
-    const res = await productApi.getProduct(id);
-    if (res) {
-      setProductUpdateField(res);
-    }
-  }, []);
-
   return (
     <div className="container">
       <div className="product-content">
@@ -95,18 +87,21 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
         </div>
 
         <div className="product__list-items">
-          {productInfo &&
-            productInfo.map((e, i) => (
-              <ProductCard
-                actions={[
-                  <EditOutlined onClick={(event) => handleEdit(e.id, event)} key="edit" />,
-                  <DeleteOutlined onClick={(event) => handleDelete(e.id, event)} key="delete" />,
-                ]}
-                isEdit
-                info={e}
-                key={i}
-              />
-            ))}
+          {productInfo
+            ? productInfo.map((e, i) => (
+                <ProductCard
+                  actions={[
+                    <EditOutlined onClick={(event) => handleEdit(e.id, event)} key="edit" />,
+                    <DeleteOutlined onClick={(event) => handleDelete(e.id, event)} key="delete" />,
+                  ]}
+                  isEdit
+                  info={e}
+                  key={i}
+                />
+              ))
+            : Array.from({ length: 6 }, () => Math.random()).map((e, i) => (
+                <Skeleton key={i} active />
+              ))}
         </div>
 
         <ProductModifyModal

@@ -15,6 +15,7 @@ import ProductDetailOption from '../components/ProductDetailOption';
 import ProductDetailReview from '../components/ProductDetailReview';
 import RateSummary from '../components/RateSummary';
 import { useTranslation } from 'react-i18next';
+import { Avatar, Skeleton } from 'antd';
 
 interface ProductDetailPageProps {}
 
@@ -106,16 +107,20 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
     <div className="container">
       <div className="product-detail">
         <Breadcrumb />
-        {productDetail && (
-          <>
-            <div className="product-detail__container">
-              <div className="product-detail__left-side">
-                <div className="product-detail__img-container">
-                  <img src={productDetail.image} alt="product" />
-                </div>
-              </div>
+        <div className="product-detail__container">
+          <div className="product-detail__left-side">
+            <div className="product-detail__img-container">
+              {productDetail ? (
+                <img src={productDetail.image} alt="product" />
+              ) : (
+                <Skeleton.Image className="product__skeleton-img" />
+              )}
+            </div>
+          </div>
 
-              <div className="product-detail__right-side">
+          <div className="product-detail__right-side">
+            {productDetail ? (
+              <>
                 <div className="product-detail__header-container">
                   <div className="product-detail__header">{productDetail.name}</div>
                   <RateSummary rateNumber={3.5} />
@@ -140,41 +145,54 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
                   <span>{t('product.detail.warranty')}</span>
                   <span>3 {t('product.detail.refund_day')}</span>
                 </div>
-              </div>
-            </div>
+              </>
+            ) : (
+              <>
+                <Skeleton active />
+                <Skeleton active />
+              </>
+            )}
+          </div>
+        </div>
 
-            <div className="product-detail__container column">
-              <div className="product-detail__content">
-                <h2 className="product-content__header">{t('product.detail.detail')}</h2>
-                <div className="product-content__description">
-                  <div className="product-category">
-                    <p className="product__category-item">
-                      <span>{t('product.detail.type')}</span>
-                      <span>{productDetail.category}</span>
-                    </p>
-                    <p className="product__category-item">
-                      <span>{t('product.detail.warehouse')}</span>
-                      <span>19408424</span>
-                    </p>
-                    <p className="product__category-item">
-                      <span>{t('product.detail.from')}</span>
-                      <span>Hà Nội</span>
-                    </p>
-                  </div>
+        <div className="product-detail__container column">
+          <div className="product-detail__content">
+            <h2 className="product-content__header">{t('product.detail.detail')}</h2>
+            <div className="product-content__description">
+              {productDetail ? (
+                <div className="product-category">
+                  <p className="product__category-item">
+                    <span>{t('product.detail.type')}</span>
+                    <span>{productDetail.category}</span>
+                  </p>
+                  <p className="product__category-item">
+                    <span>{t('product.detail.warehouse')}</span>
+                    <span>19408424</span>
+                  </p>
+                  <p className="product__category-item">
+                    <span>{t('product.detail.from')}</span>
+                    <span>Hà Nội</span>
+                  </p>
                 </div>
-              </div>
-
-              <div className="product-detail__content">
-                <h2 className="product-content__header">{t('product.detail.description')}</h2>
-                <div className="product-content__description">{productDetail.description}</div>
-              </div>
+              ) : (
+                <Skeleton active />
+              )}
             </div>
+          </div>
 
-            <div className="product-detail__container">
-              <ProductDetailReview />
-            </div>
-          </>
-        )}
+          <div className="product-detail__content">
+            <h2 className="product-content__header">{t('product.detail.description')}</h2>
+            {productDetail ? (
+              <div className="product-content__description">{productDetail.description}</div>
+            ) : (
+              <Skeleton active />
+            )}
+          </div>
+        </div>
+
+        <div className="product-detail__container">
+          <ProductDetailReview />
+        </div>
       </div>
 
       <ModalComponent
