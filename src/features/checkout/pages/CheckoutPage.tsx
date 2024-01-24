@@ -201,21 +201,23 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
         )}
 
         {orderData && orderData.status === 'PAID' && (
-          <div className="checkout-alert">
-            <span>
-              <CheckCircleFilled style={{ color: '#00F295' }} />
-              {t('checkout.order_checkouted')}
-            </span>
+          <div className="checkout-alert__container">
+            <div className="checkout-alert">
+              <span>
+                <CheckCircleFilled style={{ color: '#00F295' }} />
+                {t('checkout.order_checkouted')}
+              </span>
 
-            <Button
-              className="checkout-alert__nav-btn"
-              key="back"
-              danger
-              type="primary"
-              onClick={handleNav}
-            >
-              {t('checkout.continue_buy')}
-            </Button>
+              <Button
+                className="checkout-alert__nav-btn"
+                key="back"
+                danger
+                type="primary"
+                onClick={handleNav}
+              >
+                {t('checkout.continue_buy')}
+              </Button>
+            </div>
           </div>
         )}
       </section>
