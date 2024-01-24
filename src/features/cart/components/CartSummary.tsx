@@ -1,8 +1,8 @@
-import { Checkbox } from 'antd';
+import { Button, Checkbox } from 'antd';
 import orderApi from 'api/orderApi';
 import { CoinIcon, VoucherIcon } from 'components/Icons';
 import { OrderGetInformation } from 'models';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,23 +24,25 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
   const navigate = useNavigate();
   const token = localStorage.getItem('token') || '';
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleCheckAll = () => {
     setIsCheckedAll(!isCheckedAll);
   };
 
   const handleSubmit = () => {
+    setIsLoading(true);
     updateOrderStatus(orderData);
-    navigate(`/checkout?state=${orderData.id}`);
   };
 
   const updateOrderStatus = useCallback(async (data) => {
     try {
       const res = await orderApi.updateOrderStatus(token, data.id, { status: 'PENDING' });
-      console.log(res);
+      res && navigate(`/checkout?state=${orderData.id}`);
     } catch (error) {
       console.log('Error to update order status');
     }
+    setIsLoading(false);
   }, []);
 
   const handleDelete = () => {
@@ -88,9 +90,9 @@ const CartSummary: React.FunctionComponent<CartSummaryProps> = ({
           </span>
         </div>
 
-        <button className="cart-summary__submit-btn" onClick={handleSubmit}>
+        <Button className="cart-summary__submit-btn" onClick={handleSubmit} loading={isLoading}>
           {t('cart.submit_btn')}
-        </button>
+        </Button>
       </div>
     </div>
   );

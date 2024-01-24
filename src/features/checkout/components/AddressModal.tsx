@@ -1,7 +1,10 @@
 import { Button, Modal } from 'antd';
+import orderApi from 'api/orderApi';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { OrderAddressRequest, OrderGetInformation } from 'models';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   checkoutActions,
   selectAddressIdChecked,
@@ -11,14 +14,12 @@ import {
 } from '../checkoutSlice';
 import AddressList from './AddressList';
 import CreateAddressForm from './CreateAddressForm';
-import { addressApi } from 'api/addressApi';
-import orderApi from 'api/orderApi';
-import { OrderAddressRequest } from 'models';
-import { useLocation } from 'react-router-dom';
 
-interface AddressModalProps {}
+interface AddressModalProps {
+  setOrderData: (value: OrderGetInformation) => void;
+}
 
-const AddressModal: React.FunctionComponent<AddressModalProps> = (props) => {
+const AddressModal: React.FunctionComponent<AddressModalProps> = ({ setOrderData }) => {
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
   const isOpenAddressModal = useSelector(selectIsOpenAddressModal);
@@ -59,6 +60,7 @@ const AddressModal: React.FunctionComponent<AddressModalProps> = (props) => {
       const res = await orderApi.updateOrderAddress(token, id, data);
       if (res) {
         setLoading(false);
+        setOrderData(res);
         dispatch(checkoutActions.setIsOpenAddressModal(false));
       }
     },

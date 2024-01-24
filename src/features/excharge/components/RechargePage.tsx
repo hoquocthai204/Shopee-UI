@@ -44,6 +44,7 @@ const RechargePage: React.FunctionComponent<RechargePageProps> = (props) => {
       window.open(res.url, '_self');
     }
   }, []);
+
   return (
     <div className="container">
       <div className="recharge">

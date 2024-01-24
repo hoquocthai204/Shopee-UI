@@ -1,4 +1,4 @@
-import { Checkbox } from 'antd';
+import { Checkbox, Skeleton } from 'antd';
 import orderApi from 'api/orderApi';
 import discountLogo from 'assets/images/free_ship_logo.png';
 import { LandingLayoutFooter } from 'components/Common';
@@ -72,53 +72,59 @@ const CartPage: React.FunctionComponent<CartPageProps> = (props) => {
 
   return (
     <>
-      {orderData && (
-        <div className="cart">
-          <HeaderComponent title={t('cart.cart')} />
+      <div className="cart">
+        <HeaderComponent title={t('cart.cart')} />
 
-          <div className="cart-main-container">
-            <div className="cart-main__content">
-              <div className="cart-notification">
-                <img src={discountLogo} alt="free-ship-logo" />
+        <div className="cart-main-container">
+          <div className="cart-main__content">
+            <div className="cart-notification">
+              <img src={discountLogo} alt="free-ship-logo" />
 
-                <span>{t('cart.notification')}</span>
-              </div>
-
-              <div className="cart__list-header">
-                <Checkbox checked={isCheckedAll} onClick={handleCheckAll}>
-                  {t('cart.title1')}
-                </Checkbox>
-
-                <span>{t('cart.title2')}</span>
-                <span>{t('cart.title3')}</span>
-                <span>{t('cart.title4')}</span>
-                <span>{t('cart.title5')}</span>
-              </div>
-
-              <div className="cart__list">
-                <CartItem isChecked={isCheckedAll} disableQuantity itemData={orderData} />
-              </div>
+              <span>{t('cart.notification')}</span>
             </div>
 
+            <div className="cart__list-header">
+              <Checkbox checked={isCheckedAll} onClick={handleCheckAll}>
+                {t('cart.title1')}
+              </Checkbox>
+
+              <span>{t('cart.title2')}</span>
+              <span>{t('cart.title3')}</span>
+              <span>{t('cart.title4')}</span>
+              <span>{t('cart.title5')}</span>
+            </div>
+
+            <div className="cart__list">
+              {orderData ? (
+                <CartItem isChecked={isCheckedAll} disableQuantity itemData={orderData} />
+              ) : (
+                <Skeleton active />
+              )}
+            </div>
+          </div>
+
+          {orderData ? (
             <CartSummary
               forwardedRef={summaryRef}
               setIsCheckedAll={setIsCheckedAll}
               isCheckedAll={isCheckedAll}
               orderData={orderData}
             />
-          </div>
-
-          {!orderId && (
-            <CartSummary
-              forwardedRef={fixedSummaryRef}
-              isFixed={true}
-              setIsCheckedAll={setIsCheckedAll}
-              isCheckedAll={isCheckedAll}
-              orderData={orderData}
-            />
+          ) : (
+            <Skeleton active />
           )}
         </div>
-      )}
+
+        {!orderId && orderData && (
+          <CartSummary
+            forwardedRef={fixedSummaryRef}
+            isFixed={true}
+            setIsCheckedAll={setIsCheckedAll}
+            isCheckedAll={isCheckedAll}
+            orderData={orderData}
+          />
+        )}
+      </div>
 
       <LandingLayoutFooter />
     </>

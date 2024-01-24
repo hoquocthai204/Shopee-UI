@@ -17,7 +17,7 @@ const RechargeSuccess: React.FunctionComponent<RechargeSuccessProps> = (props) =
             <CheckCircleFilled style={{ color: '#00F295' }} />
             Successfully recharged
           </p>
-          <Button onClick={() => navigate('/')} type="primary" size={'large'} block>
+          <Button onClick={() => navigate('/')} type="primary" size={'large'} danger block>
             Home
           </Button>
         </div>

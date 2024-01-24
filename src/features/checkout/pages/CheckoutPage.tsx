@@ -1,10 +1,10 @@
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
 import orderApi from 'api/orderApi';
 import { useAppDispatch } from 'app/hooks';
 import { LandingLayoutFooter } from 'components/Common';
 import HeaderComponent from 'components/Common/HeaderComponent';
 import { CoinIcon, LocationMarkerIcon, VoucherIcon } from 'components/Icons';
-import { OrderGetInformation } from 'models';
+import { AddressResponse, OrderGetInformation } from 'models';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { checkoutActions } from '../checkoutSlice';
@@ -12,6 +12,7 @@ import AddressModal from '../components/AddressModal';
 import ConfirmModal from '../components/ConfirmModal';
 import { CheckCircleFilled } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { addressApi } from 'api/addressApi';
 
 interface CheckoutPageProps {}
 
@@ -20,6 +21,7 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
   const location = useLocation();
   const token = localStorage.getItem('token') || '';
   const [orderData, setOrderData] = useState<OrderGetInformation>();
+  const [addressData, setAddressData] = useState<AddressResponse>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -57,11 +59,29 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
     navigate('/');
   };
 
+  const getAddressData = useCallback(
+    async (addressId: number) => {
+      try {
+        const res = await addressApi.getAddress(addressId);
+        if (res) {
+          setAddressData(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [orderData]
+  );
+
+  useEffect(() => {
+    orderData && getAddressData(orderData.addressId);
+  }, [orderData]);
+
   return (
     <>
       <section className="checkout">
         <HeaderComponent title={t('checkout.header')} disableSearch />
-        {orderData?.status === 'PENDING' && (
+        {orderId && (
           <>
             <div className="checkout__dash-line" />
             <div className="checkout__delivery">
@@ -71,16 +91,26 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
               </p>
 
               <div className="checkout__contact-container">
-                <div className="checkout__contact">
-                  <p className="checkout__contact-name">Hồ Quốc Thái (+84) 858673815</p>
-                </div>
+                {addressData && (
+                  <>
+                    <div className="checkout__contact">
+                      <p className="checkout__contact-name">
+                        {addressData.userName} {addressData.phoneNumber}
+                      </p>
+                    </div>
 
-                <p className="checkout__address">
-                  Số 294a, Đường Khuông Việt, Phường Phú Trung, Quận Tân Phú, TP. Hồ Chí Minh
-                  <span>{t('checkout.default')}</span>
-                </p>
+                    <p className="checkout__address">
+                      {`${addressData.detailAddress}, ${addressData.address
+                        .split(',')
+                        .reverse()
+                        .join(',')}`}
+                      <span>{t('checkout.default')}</span>
+                    </p>
+                  </>
+                )}
+
                 <span className="checkout__change-btn" onClick={handleChangeAddress}>
-                  {t('checkout.change')}
+                  {addressData ? t('checkout.change') : t('checkout.add_new')}
                 </span>
               </div>
             </div>
@@ -95,7 +125,7 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
               </div>
 
               <div className="checkout__product">
-                {orderData && (
+                {orderData ? (
                   <div className="checkout__product-detail">
                     <div className="checkout__product-info">
                       <div className="checkout__product-image-wrapper">
@@ -114,6 +144,8 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
                       {orderData.productInfo.price * orderData.quantity}
                     </span>
                   </div>
+                ) : (
+                  <Skeleton active />
                 )}
 
                 <div className="checkout__other-option">
@@ -151,7 +183,7 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
                   </p>
 
                   <p className="checkout__total-price">
-                    <CoinIcon /> {orderData ? orderData?.productInfo.price * orderData.quantity : 0}
+                    <CoinIcon /> {orderData ? orderData.productInfo.price * orderData.quantity : 0}
                   </p>
                 </div>
               </div>
@@ -168,7 +200,7 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
           </>
         )}
 
-        {orderData?.status === 'PAID' && (
+        {orderData && orderData.status === 'PAID' && (
           <div className="checkout-alert">
             <span>
               <CheckCircleFilled style={{ color: '#00F295' }} />
@@ -190,7 +222,7 @@ const CheckoutPage: React.FunctionComponent<CheckoutPageProps> = (props) => {
 
       <LandingLayoutFooter />
 
-      <AddressModal />
+      <AddressModal setOrderData={setOrderData} />
 
       {orderId && <ConfirmModal orderId={orderId} />}
     </>

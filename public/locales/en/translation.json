@@ -73,6 +73,7 @@
     "header": "Checkout",
     "address": "Shipping Address",
     "change": "Change",
+    "add_new": "Create New Address",
     "default": "Default",
     "title1": "Product",
     "title2": "Unit Price",
