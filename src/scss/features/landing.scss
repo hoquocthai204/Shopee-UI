@@ -64,6 +64,10 @@
   background-color: #fe6232;
   color: white;
 
+  // span {
+  //   white-space: nowrap;
+  // }
+
   .header-top__group {
     display: flex;
     align-items: center;
@@ -202,11 +206,16 @@
       }
 
       .landing-header__tag-list {
+        margin-top: 7px !important;
         display: flex;
         color: white;
         justify-content: space-between;
         margin-top: 0.1875rem;
         cursor: pointer;
+        gap: 15px;
+        line-height: 14px;
+        height: 14px;
+        flex-wrap: wrap;
 
         .landing-header__tag {
           font-size: 0.75rem;
@@ -264,9 +273,11 @@
         border-bottom: solid 4px red;
         margin-bottom: 10px;
       }
+
       .landing__list-items {
         display: grid;
-        grid-template-columns: auto auto auto auto auto auto;
+        // grid-template-columns: auto auto auto auto auto auto;
+        grid-template-columns: repeat(auto-fill, 190px);
         gap: 10px;
 
         margin-bottom: 10px;

@@ -172,3 +172,20 @@ Use `useAppDispatch` and `useAppSelector` instead of `useDispatch` and `useSelec
 - `Form Component`: Handle form validations and trigger callback on submit.
 - `Form Fields`: InputField, PhotoField, MapPickerField... A coordinator between form state and UI control.
 - `UI Control`: input, checkbox or a control from an external lib. A dump component which receives data from Form Field and render it accordingly.
+
+### CSS Responsive:
+
+```css
+// --------- RESPONSIVE ---------
+/* Mobile < 739px*/
+@media only screen and (max-width: 46.1875em) {
+}
+
+/* 740px < Tablet < 1023px */
+@media only screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+}
+
+/* PC > 1024px */
+@media only screen and (min-width: 64em) {
+}
+```
