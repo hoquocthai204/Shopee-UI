@@ -225,9 +225,6 @@
                 border-top-right-radius: 2px;
                 border-bottom-right-radius: 2px;
               }
-
-              &:hover {
-              }
             }
           }
         }
@@ -246,6 +243,7 @@
 
           &:nth-child(1) {
             background-color: #fff5f1;
+            display: none;
           }
 
           &:nth-child(2) {

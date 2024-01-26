@@ -4,6 +4,7 @@ import { recommentProductTagInfo } from 'constants/landing/recommentProductTagIn
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderTopNav from './HeaderTopNav';
+import { Button } from 'antd';
 
 export interface LandingLayoutHeaderProps {}
 
@@ -29,10 +30,11 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
                 className="landing-header__input"
                 placeholder="TẶNG MÁY TĂM NƯỚC 2.490.000Đ"
               />
-              <button className="landing-header__search-btn">
+              <Button className="landing-header__search-btn">
                 <SearchIcon />
-              </button>
+              </Button>
             </div>
+
             <ul className="landing-header__tag-list">
               {recommentProductTagInfo.map((val, index) => (
                 <li key={index} className="landing-header__tag">
