@@ -25,6 +25,9 @@
         "merchant": "Thương Nhân",
         "products": "Quản Lý Sản Phẩm"
       }
+    },
+    "body": {
+      "title1": "GỢI Ý HÔM NAY"
     }
   },
 

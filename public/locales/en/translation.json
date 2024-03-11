@@ -25,6 +25,9 @@
         "merchant": "Mechant",
         "products": "Products"
       }
+    },
+    "body": {
+      "title1": "DAILY DISCOVER"
     }
   },
 

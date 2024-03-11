@@ -8,11 +8,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Banner from '../components/Banner';
 import CategoryContainer from '../components/CategoryContainer';
 import { Skeleton } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 interface LandingPageProps {}
 
 const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
   const [productInfo, setProductInfo] = useState<ProductInfo[] | null>(null);
+  const { t } = useTranslation();
 
   const getProduct = useCallback(async () => {
     const res = await productApi.getAllProduct();
@@ -31,7 +33,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
         <CategoryContainer />
 
         <div className="landing-content__header">
-          <span>DAILY DISCOVER</span>
+          <span>{t('landing.body.title1')}</span>
         </div>
 
         <div className="landing__list-items">

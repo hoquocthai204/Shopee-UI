@@ -12,9 +12,14 @@ interface CreateAddressFormProps {}
 const CreateAddressForm: React.FunctionComponent<CreateAddressFormProps> = (props) => {
   const { TabPane } = Tabs;
   const [activeKey, setActiveKey] = useState<string>('1');
-  const [locationData, setLocationData] = useState<any>(null);
+
+  const [provinces, setProvinces] = useState<any>(null);
+  const [districts, setDistricts] = useState<any>(null);
+  const [wards, setWards] = useState<any>(null);
+
   const [province, setProvince] = useState<string>('');
   const [district, setDistrict] = useState<string>('');
+
   const [addressData, setAddressData] = useState<AddressResponse>();
   const updateAddressSelected = useAppSelector(selectUpdateAddressSelected);
   const token = localStorage.getItem('token') || '';
@@ -32,15 +37,27 @@ const CreateAddressForm: React.FunctionComponent<CreateAddressFormProps> = (prop
     }
   };
 
-  const getLocationData = useCallback(async () => {
+  const getProvincesData = useCallback(async () => {
     try {
-      const res = await locationApi.getVNLocation();
-      if (res) setLocationData(res.data);
+      const res = await locationApi.getProvinces();
+      if (res) setProvinces(res.data);
+    } catch (error) {}
+  }, []);
+  const getDistrictsData = useCallback(async (provinceId) => {
+    try {
+      const res = await locationApi.getDistricts(provinceId);
+      if (res) setDistricts(res.data);
+    } catch (error) {}
+  }, []);
+  const getWardData = useCallback(async (districtId) => {
+    try {
+      const res = await locationApi.getWards(districtId);
+      if (res) setWards(res.data);
     } catch (error) {}
   }, []);
 
   useEffect(() => {
-    getLocationData();
+    getProvincesData();
     if (updateAddressSelected) {
       getAddressData(updateAddressSelected);
     }
@@ -99,64 +116,54 @@ const CreateAddressForm: React.FunctionComponent<CreateAddressFormProps> = (prop
         centered
       >
         <TabPane tab="Tỉnh/ Thành phố" key="1" className="address-form__tab">
-          {locationData &&
-            locationData.map((e: any) => (
+          {provinces &&
+            provinces.results.map((e: any) => (
               <li
-                key={e.code}
+                key={e.province_id}
                 onClick={() => {
-                  setProvince(e.name);
+                  setProvince(e.province_name);
+                  getDistrictsData(e.province_id);
                   setActiveKey('2');
-                  form.setFieldsValue({ address: e.name });
+                  form.setFieldsValue({ address: e.province_name });
                 }}
               >
-                {e.name}
+                {e.province_name}
               </li>
             ))}
         </TabPane>
 
         <TabPane tab="Quận/Huyện" key="2" disabled={!province}>
-          {locationData &&
-            locationData
-              .filter((val: any) => val.name === province)
-              .map((e: any) =>
-                e.districts.map((i: any) => (
-                  <li
-                    onClick={() => {
-                      setDistrict(i.name);
-                      setActiveKey('3');
-                      form.setFieldsValue({ address: `${province}, ${i.name}` });
-                    }}
-                    key={i.code}
-                  >
-                    {i.name}
-                  </li>
-                ))
-              )}
+          {districts &&
+            districts.results.map((e: any) => (
+              <li
+                onClick={() => {
+                  setDistrict(e.district_name);
+                  getWardData(e.district_id);
+                  setActiveKey('3');
+                  form.setFieldsValue({ address: `${province}, ${e.district_name}` });
+                }}
+                key={e.district_id}
+              >
+                {e.district_name}
+              </li>
+            ))}
         </TabPane>
 
         <TabPane tab="Phường/Xã" key="3" disabled={!district}>
-          {locationData &&
-            locationData
-              .filter((val: any) => val.name === province)
-              .map((e: any) =>
-                e.districts
-                  .filter((val: any) => val.name === district)
-                  .map((i: any) =>
-                    i.wards.map((j: any) => (
-                      <li
-                        onClick={() => {
-                          setActiveKey('1');
-                          form.setFieldsValue({
-                            address: `${province}, ${district}, ${j.name}`,
-                          });
-                        }}
-                        key={j.code}
-                      >
-                        {j.name}
-                      </li>
-                    ))
-                  )
-              )}
+          {wards &&
+            wards.results.map((e: any) => (
+              <li
+                onClick={() => {
+                  setActiveKey('1');
+                  form.setFieldsValue({
+                    address: `${province}, ${district}, ${e.ward_name}`,
+                  });
+                }}
+                key={e.ward_id}
+              >
+                {e.ward_name}
+              </li>
+            ))}
         </TabPane>
       </Tabs>
 
