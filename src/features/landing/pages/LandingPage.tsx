@@ -9,12 +9,15 @@ import Banner from '../components/Banner';
 import CategoryContainer from '../components/CategoryContainer';
 import { Skeleton } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from 'app/hooks';
+import { landingActions } from '../landingSlice';
 
 interface LandingPageProps {}
 
 const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
   const [productInfo, setProductInfo] = useState<ProductInfo[] | null>(null);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const getProduct = useCallback(async () => {
     const res = await productApi.getAllProduct();
@@ -24,6 +27,10 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
   useEffect(() => {
     getProduct();
   }, []);
+
+  useEffect(() => {
+    dispatch(landingActions.setProductInfoList(productInfo));
+  }, [productInfo]);
 
   return (
     <div className="container">

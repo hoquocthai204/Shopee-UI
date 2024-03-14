@@ -1,13 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ProductInfo } from 'models/product/productInfo';
 
-export interface LandingState {}
+export interface LandingState {
+  productInfoList: ProductInfo[] | null;
+}
 
-const initialState: LandingState = {};
+const initialState: LandingState = {
+  productInfoList: null,
+};
 
 const landingSlice = createSlice({
   name: 'landing',
   initialState,
-  reducers: {},
+  reducers: {
+    setProductInfoList(state, action) {
+      state.productInfoList = action.payload;
+    },
+  },
   extraReducers: {},
 });
 
@@ -15,6 +24,7 @@ const landingSlice = createSlice({
 export const landingActions = landingSlice.actions;
 
 // Selectors
+export const selectStates = (state: any) => state.landing;
 
 // Reducer
 const landingReducer = landingSlice.reducer;

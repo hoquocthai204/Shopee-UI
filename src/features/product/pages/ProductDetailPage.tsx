@@ -1,3 +1,4 @@
+import { Skeleton } from 'antd';
 import orderApi from 'api/orderApi';
 import productApi from 'api/productApi';
 import walletApi from 'api/walletApi';
@@ -9,13 +10,12 @@ import { selectIsLoggedIn } from 'features/auth/authSlice';
 import { ProductInfo } from 'models/product/productInfo';
 import { WalletInformation } from 'models/wallet/walletInformation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CustomInputNumber from '../components/CustomInputNumber';
 import ProductDetailOption from '../components/ProductDetailOption';
 import ProductDetailReview from '../components/ProductDetailReview';
 import RateSummary from '../components/RateSummary';
-import { useTranslation } from 'react-i18next';
-import { Avatar, Skeleton } from 'antd';
 
 interface ProductDetailPageProps {}
 
@@ -36,7 +36,7 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
   useEffect(() => {
     const productId = Number(locate.pathname.split('/')[2]);
     getProductDetail(productId);
-  }, []);
+  }, [locate.pathname]);
 
   const getProductDetail = useCallback(async (id: number) => {
     const res = await productApi.getProduct(id);
