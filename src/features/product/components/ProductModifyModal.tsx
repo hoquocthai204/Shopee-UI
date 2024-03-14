@@ -226,7 +226,7 @@ const ProductModifyModal: React.FunctionComponent<IProductModifyModalProps> = ({
                   danger
                   htmlType="submit"
                 >
-                  Create
+                  {!isUpdate ? 'Create' : 'Update'}
                 </Button>
               </Form.Item>
             </div>
