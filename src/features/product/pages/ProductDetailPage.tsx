@@ -38,6 +38,10 @@ const ProductDetailPage: React.FunctionComponent<ProductDetailPageProps> = (prop
     getProductDetail(productId);
   }, [locate.pathname]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const getProductDetail = useCallback(async (id: number) => {
     const res = await productApi.getProduct(id);
     if (res) {
